@@ -5,9 +5,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -25,9 +22,12 @@ public class Utils {
 	public static HashMap<String, String> serverToName = new HashMap<String, String>();
 	public static HashMap<Integer, String> clientidtoprocess = new HashMap<Integer, String>();
 
+	public static Timestamp getTimestamp() {
+		return new Timestamp(new Date().getTime());
+	}
+
 	public static String getTimestampForLog() {
-		LocalDateTime date = LocalDateTime.now(ZoneId.of(Constants.ZONE));
-		return "[" + date.format(DateTimeFormatter.ofPattern(Constants.FORMAT)) + "]";
+		return "[" + (new Timestamp(new Date().getTime())) + "]";
 	}
 
 	public static void log(String message) {
@@ -92,10 +92,6 @@ public class Utils {
 		return "FileServer1";
 	}
 
-	public static Timestamp getTimestamp() {
-		return new Timestamp(new Date().getTime());
-	}
-
 	public static int compareTimestamp(Timestamp t1, Timestamp t2, boolean print) {
 		if (t1 == null && t2 == null)
 			return 0;
@@ -127,19 +123,19 @@ public class Utils {
 
 	public static void printServerStart(String id) {
 		if ("1".equals(id)) {
-			Utils.logWithSeparator("Starting Server:1");
+			Utils.logWithSeparator("Starting Quorum Server:1");
 		} else if ("2".equals(id)) {
-			Utils.logWithSeparator("Starting Server:2");
+			Utils.logWithSeparator("Starting Quorum Server:2");
 		} else if ("3".equals(id)) {
-			Utils.logWithSeparator("Starting Server:4");
+			Utils.logWithSeparator("Starting Quorum Server:3");
 		} else if ("4".equals(id)) {
-			Utils.logWithSeparator("Starting Server:5");
+			Utils.logWithSeparator("Starting Quorum Server:3");
 		} else if ("5".equals(id)) {
-			Utils.logWithSeparator("Starting Server:6");
+			Utils.logWithSeparator("Starting Quorum Server:5");
 		} else if ("6".equals(id)) {
-			Utils.logWithSeparator("Starting Server:7");
+			Utils.logWithSeparator("Starting Quorum Server:6");
 		} else if ("7".equals(id)) {
-			Utils.logWithSeparator("Starting Server:8");
+			Utils.logWithSeparator("Starting Quorum Server:7");
 		}
 	}
 }

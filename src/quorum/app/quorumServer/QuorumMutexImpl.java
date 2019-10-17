@@ -9,7 +9,6 @@ import quorum.app.util.Utils;
 
 public class QuorumMutexImpl {
 	private String state;
-	// ArrayList<String> queue;
 	ArrayList<QuorumQueuedRequest> queuedRequest;
 	HashMap<Integer, DataOutputStream> clientDosMap;
 
@@ -47,7 +46,6 @@ public class QuorumMutexImpl {
 	public QuorumQueuedRequest chooseFromDeferredQueue() {
 		Collections.sort(queuedRequest, QuorumQueuedRequest.DREP_COMP);
 		QuorumQueuedRequest chosenRequest = queuedRequest.get(0);
-		// DataOutputStream dos = clientDosMap.get(chosenRequest.getProcessNum());
 		Utils.log("Next request served is:--->" + chosenRequest.getProcessNum() + "[][] made at "
 				+ chosenRequest.getTimestamp());
 		return chosenRequest;

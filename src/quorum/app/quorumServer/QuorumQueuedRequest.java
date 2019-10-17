@@ -13,7 +13,6 @@ import quorum.app.util.Utils;
  * Class object for DeferredReply object
  */
 public class QuorumQueuedRequest implements Comparable<QuorumQueuedRequest> {
-	// public boolean isDeferred;
 	private int clientNum;
 	private Timestamp timestamp;
 
@@ -26,16 +25,9 @@ public class QuorumQueuedRequest implements Comparable<QuorumQueuedRequest> {
 	 */
 	public QuorumQueuedRequest(int clientNum, Timestamp timestamp) {
 		super();
-		// this.isDeferred = isDeferred;
 		this.clientNum = clientNum;
 		this.timestamp = timestamp;
 	}
-
-	/*
-	 * public boolean isDeferred() { return isDeferred; }
-	 * 
-	 * public void setDeferred(boolean isDeferred) { this.isDeferred = isDeferred; }
-	 */
 
 	public int getProcessNum() {
 		return clientNum;
@@ -73,11 +65,4 @@ public class QuorumQueuedRequest implements Comparable<QuorumQueuedRequest> {
 		}
 
 	};
-
-	// @Override
-	/*
-	 * public String toString() { return "DeferredReply [isDeferred=" + isDeferred +
-	 * ", processNum=" + clientNum + ", timestamp=" + timestamp + "]"; }
-	 */
-
 }

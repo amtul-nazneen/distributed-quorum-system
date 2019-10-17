@@ -23,7 +23,6 @@ public class ClientMutexImpl {
 	}
 
 	private void init() {
-		// this.pendingQuorumReply = 1;
 		this.docsForQuorum = new HashMap<Integer, DataOutputStream>();
 	}
 
@@ -60,14 +59,13 @@ public class ClientMutexImpl {
 		Utils.log("Sending RELEASE to my quorum");
 		Timestamp releaseTime = Utils.getTimestamp();
 		for (DataOutputStream dos : docsForQuorum.values()) {
-			dos.writeUTF(Constants.RELEASE + "," + releaseTime);// dos.writeUTF(tosend);
+			dos.writeUTF(Constants.RELEASE + "," + releaseTime);
 		}
 	}
 
 	public void mapQuorumDOS(DataOutputStream dos1, DataOutputStream dos2) {
 		docsForQuorum.put(1, dos1);
 		docsForQuorum.put(2, dos2);
-		// Utils.log("Mapped dos");
 		// TODO: clear hashmap and add quorum worth writers
 	}
 

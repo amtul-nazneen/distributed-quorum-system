@@ -1,15 +1,17 @@
 package quorum.app.server;
 
+import java.io.BufferedWriter;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileWriter;
 import java.net.Socket;
 
+import quorum.app.util.Constants;
 import quorum.app.util.Utils;
 
 public class ServerRequestHandler implements Runnable {
 	Socket socket;
-	// BufferedReader reader;
-	// PrintWriter writer;
 	final DataInputStream dis;
 	final DataOutputStream dos;
 	String clientName;
@@ -40,9 +42,20 @@ public class ServerRequestHandler implements Runnable {
 		try {
 			while (true) {
 				message = dis.readUTF();
+				String tokens[] = message.split(",");
+				String clientID = tokens[0];
+				String timestamp = tokens[1];
 				Utils.log("received a write from client:------>" + clientName);
-				Utils.log("message is: " + message);
-				dos.writeUTF("from server, done the write");
+				String accessFile = Constants.FOLDER_PATH + Constants.SERVER_0 + "/" + Constants.FILE0_NAME;
+				File f = new File(accessFile);
+				FileWriter fw = new FileWriter(f, true);
+				BufferedWriter filewriter = new BufferedWriter(fw);
+				filewriter.write(Constants.SERVER_WRITE_MESSAGE + Utils.getClientFromID(Integer.valueOf(clientID))
+						+ " at " + timestamp + Constants.EOL);
+				filewriter.close();
+				fw.close();
+				Utils.log("Done Writing, sending success to--->" + clientName);
+				dos.writeUTF(Constants.SERVER_SUCCESS);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

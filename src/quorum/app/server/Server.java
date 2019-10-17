@@ -11,7 +11,7 @@ import quorum.app.util.Utils;
 public class Server {
 
 	public static void main(String[] args) throws Exception {
-
+		Utils.logWithSeparator("Starting File Server");
 		ServerSocket ss = null;
 		Socket s = null;
 

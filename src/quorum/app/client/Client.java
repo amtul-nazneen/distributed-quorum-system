@@ -10,6 +10,9 @@ import quorum.app.util.Constants;
 import quorum.app.util.Utils;
 
 public class Client {
+	static int clientID;
+	static int csRequestCount = 1;
+
 	public static void main(String[] args) throws IOException {
 		if (args.length < 1) {
 			Utils.log("No Client ID provided.");
@@ -22,9 +25,9 @@ public class Client {
 		if ("2".equals(id)) {
 			Utils.logWithSeparator("Starting Client ID:2");
 		}
+		clientID = Integer.valueOf(id);
 		try {
 			ClientMutexImpl clientMutex = new ClientMutexImpl(Integer.valueOf(id));
-			int csRequestCount = 1;
 
 			Socket socketQuorum1 = new Socket(Constants.QUORUM1_HOST, Constants.SERVER_PORT);
 			DataOutputStream dosQuorum1 = new DataOutputStream(socketQuorum1.getOutputStream());
@@ -38,14 +41,12 @@ public class Client {
 			ClientRequestHandler reqHandlerQuorum2 = new ClientRequestHandler(socketQuorum2, clientMutex);
 			Thread threadQuroum2 = new Thread(reqHandlerQuorum2);
 			threadQuroum2.start();
-			Utils.log("Connected to: " + Utils.getQuorumServerFromHost(Constants.QUORUM1_HOST));
+			Utils.log("Connected to: " + Utils.getQuorumServerFromHost(Constants.QUORUM2_HOST));
 
 			Socket socketFileServer = new Socket(Constants.FILESERVER_HOST, Constants.SERVER_PORT);
 			DataOutputStream dosFileServer = new DataOutputStream(socketFileServer.getOutputStream());
 			DataInputStream disFileServer = new DataInputStream(socketFileServer.getInputStream());
 			Utils.log("Connected to: " + Utils.getFileServerFromHost());
-			// ClientRequestHandler fileServer = new ClientRequestHandler(socketQuorum2,
-			// clientMutex);
 
 			while (true) {
 				Thread.sleep((long) (Math.random() * 10000));
@@ -58,11 +59,9 @@ public class Client {
 
 				clientMutex.myCSRequestBegin(myRequestTime, quorumSize);
 
-				Utils.log("Entering CS Now");
 				executeCS(socketFileServer, dosFileServer, disFileServer);
-				Thread.sleep(Integer.valueOf(id) * 3000);
-				Utils.log("Finished CS");
 
+				Thread.sleep(Integer.valueOf(id) * 3000);
 				clientMutex.sendRelease();
 			}
 		} catch (Exception e) {
@@ -72,7 +71,9 @@ public class Client {
 
 	private static void executeCS(Socket socketFileServer, DataOutputStream dosFileServer,
 			DataInputStream disFileServer) throws Exception {
-		dosFileServer.writeUTF("hello from client");
+		Utils.log("===================== Starting  CS_Access: [[[[[[[[[ ---- " + csRequestCount
+				+ " ---- ]]]]]]]]] =====================");
+		dosFileServer.writeUTF(clientID + "," + Utils.getTimestampForLog());
 		String reply = "";
 		boolean gotReply = false;
 		Utils.log("Wrote to file server, waiting for reply");
@@ -84,5 +85,7 @@ public class Client {
 				gotReply = true;
 			}
 		}
+		Utils.log("===================== Completed  CS_Access: [[[[[[[[[ ---- " + csRequestCount
+				+ " ---- ]]]]]]]]] =====================");
 	}
 }
