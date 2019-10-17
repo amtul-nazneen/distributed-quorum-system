@@ -1,4 +1,4 @@
-package quorum.app.fileServer;
+package old.quorum.app.fileServer;
 
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -25,13 +25,13 @@ public class Server {
 		String id = args[0];
 		String serverName = null;
 		if ("1".equals(id)) {
-			serverName = Constants.SERVER_1;
+			// serverName = Constants.SERVER_1;
 			Utils.logWithSeparator("Starting Server:1");
 		} else if ("2".equals(id)) {
-			serverName = Constants.SERVER_2;
+			// serverName = Constants.SERVER_2;
 			Utils.logWithSeparator("Starting Server:2");
 		} else if ("3".equals(id)) {
-			serverName = Constants.SERVER_3;
+			// serverName = Constants.SERVER_3;
 			Utils.logWithSeparator("Starting Server:3");
 		}
 		ServerSocket ss = null;
@@ -42,9 +42,9 @@ public class Server {
 			while (true) {
 				s = ss.accept();
 				Utils.log("Client:" + clientId + " connected");
-				ServerHandler clientThread = new ServerHandler(s, serverName, clientId);
-				Thread t = new Thread(clientThread);
-				t.start();
+				// ServerHandler clientThread = new ServerHandler(s, serverName, clientId);
+				// Thread t = new Thread(clientThread);
+				// t.start();
 				clientId++;
 
 			}

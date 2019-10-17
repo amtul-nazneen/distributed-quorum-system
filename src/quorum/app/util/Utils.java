@@ -88,6 +88,10 @@ public class Utils {
 		return serverToName.get(host);
 	}
 
+	public static String getFileServerFromHost() {
+		return "FileServer1";
+	}
+
 	public static Timestamp getTimestamp() {
 		return new Timestamp(new Date().getTime());
 	}

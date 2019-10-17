@@ -11,11 +11,12 @@ public class Constants {
 	 * ------ Section I: Begin of: No. of random requests to be generated for each
 	 * client ------
 	 */
-	public static final int CLIENT1_CSLIMIT = 25;
-	public static final int CLIENT2_CSLIMIT = 25;
-	public static final int CLIENT3_CSLIMIT = 25;
-	public static final int CLIENT4_CSLIMIT = 25;
-	public static final int CLIENT5_CSLIMIT = 25;
+	/*
+	 * public static final int CLIENT1_CSLIMIT = 25; public static final int
+	 * CLIENT2_CSLIMIT = 25; public static final int CLIENT3_CSLIMIT = 25; public
+	 * static final int CLIENT4_CSLIMIT = 25; public static final int
+	 * CLIENT5_CSLIMIT = 25;
+	 */
 
 	/* ------ Section II: Begin of DC machines to program model mapping ------ */
 	public static final int SERVER_PORT = 6666;
@@ -33,6 +34,8 @@ public class Constants {
 	public static final String QUORUM5_HOST = "dc05.utdallas.edu";
 	public static final String QUORUM6_HOST = "dc06.utdallas.edu";
 	public static final String QUORUM7_HOST = "dc07.utdallas.edu";
+
+	public static final String FILESERVER_HOST = "dc10.utdallas.edu";
 	/*
 	 * ------ Section III: Begin of: Thread.sleep value for each client, between
 	 * critical sections ------
@@ -51,31 +54,33 @@ public class Constants {
 	/*
 	 * ------ Section V: Begin of:Misc. configurations ------
 	 */
-	public static final int PROCESS_CHANNELS = 4;
-	public static final int TOTAL_CLIENTS = 5;
-	public static final int CHECK_PENDING_COUNT = 5;
+//	public static final int PROCESS_CHANNELS = 4;
+//	public static final int TOTAL_CLIENTS = 5;
+//	public static final int CHECK_PENDING_COUNT = 5;
 
 	public static final String WRITE_MESSAGE = "Written by Process:";
 
-	public static final String SERVER_1 = "s1";
-	public static final String SERVER_2 = "s2";
-	public static final String SERVER_3 = "s3";
-	public static final String SERVER_4 = "s4";
+//	public static final String SERVER_1 = "s1";
+//	public static final String SERVER_2 = "s2";
+//	public static final String SERVER_3 = "s3";
+//	public static final String SERVER_4 = "s4";
+	public static final String SERVER_0 = "s0";
 
-	public static final String FOLDER_PATH = "/home/eng/a/axn180041/mutex/";
+	public static final String FOLDER_PATH = "/home/eng/a/axn180041/quorum/";
 	public static final String FILE_EXT = ".txt";
 	public static final String EOL = "\n";
 
-	public static final String FILE1_NAME = "file1.txt";
-	public static final String FILE2_NAME = "file2.txt";
-	public static final String FILE3_NAME = "file3.txt";
-	public static final String FILE4_NAME = "file4.txt";
+//	public static final String FILE1_NAME = "file1.txt";
+//	public static final String FILE2_NAME = "file2.txt";
+//	public static final String FILE3_NAME = "file3.txt";
+//	public static final String FILE4_NAME = "file4.txt";
+	public static final String FILE0_NAME = "file0.txt";
 	public static final String OUTPUT_FILE = "Output.txt";
 
-	public static final String READ = "read";
-	public static final String WRITE = "write";
-	public static final String ENQUIRE = "enquire";
-	public static final String REPLY = "REPLY";
+//	public static final String READ = "read";
+//	public static final String WRITE = "write";
+//	public static final String ENQUIRE = "enquire";
+//	public static final String REPLY = "REPLY";
 	public static final String REQUEST = "REQUEST";
 
 	public static final String FORMAT = "yyyy-MM-dd HH:mm:ss.SSS";
