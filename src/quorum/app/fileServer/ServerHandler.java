@@ -60,6 +60,7 @@ public class ServerHandler implements Runnable {
 		BufferedReader filereader;
 		try {
 			while ((message = reader.readLine()) != null) {
+
 				String tokens[] = message.split(",");
 				String operation = tokens[0];
 
@@ -108,6 +109,7 @@ public class ServerHandler implements Runnable {
 					Utils.log("Sending ENQUIRE results to Process:" + processnum);
 					writer.println(files);
 				}
+
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

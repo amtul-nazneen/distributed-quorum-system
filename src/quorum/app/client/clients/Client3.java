@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 
-import quorum.app.client.ClientHandler;
+import quorum.app.client.QuorumClientHandler;
 import quorum.app.impl.MutualExclusionHelper;
 import quorum.app.impl.MutualExclusionImpl;
 import quorum.app.util.Constants;
@@ -227,9 +227,9 @@ public class Client3 {
 	 * @throws Exception
 	 */
 	private void connectToServer() throws Exception {
-		server1 = new Socket(Constants.SERVER1_HOST, Constants.SERVER_PORT);
-		server2 = new Socket(Constants.SERVER2_HOST, Constants.SERVER_PORT);
-		server3 = new Socket(Constants.SERVER3_HOST, Constants.SERVER_PORT);
+		server1 = new Socket(Constants.QUORUM1_HOST, Constants.SERVER_PORT);
+		server2 = new Socket(Constants.QUORUM2_HOST, Constants.SERVER_PORT);
+		server3 = new Socket(Constants.QUORUM3_HOST, Constants.SERVER_PORT);
 	}
 
 	/**
@@ -238,10 +238,10 @@ public class Client3 {
 	 * @throws Exception
 	 */
 	private void connectToOtherClients() throws Exception {
-		s1 = new Socket(Constants.DC_PROC1, Constants.CLIENT3_PORT);
-		s2 = new Socket(Constants.DC_PROC2, Constants.CLIENT3_PORT);
-		ss4 = new ServerSocket(Constants.CLIENT4_PORT);
-		ss5 = new ServerSocket(Constants.CLIENT5_PORT);
+//		s1 = new Socket(Constants.CLIENT1, Constants.CLIENT3_PORT);
+//		s2 = new Socket(Constants.CLIENT2, Constants.CLIENT3_PORT);
+//		ss4 = new ServerSocket(Constants.CLIENT4_PORT);
+//		ss5 = new ServerSocket(Constants.CLIENT5_PORT);
 		s4 = ss4.accept();
 		s5 = ss5.accept();
 	}
@@ -289,10 +289,10 @@ public class Client3 {
 	 * Method to start and run the channel threads
 	 */
 	private void startChannelThreads() {
-		ClientHandler css1 = new ClientHandler(s1, myMutexImpl);
-		ClientHandler css2 = new ClientHandler(s2, myMutexImpl);
-		ClientHandler css4 = new ClientHandler(s4, myMutexImpl);
-		ClientHandler css5 = new ClientHandler(s5, myMutexImpl);
+		QuorumClientHandler css1 = new QuorumClientHandler(s1, myMutexImpl);
+		QuorumClientHandler css2 = new QuorumClientHandler(s2, myMutexImpl);
+		QuorumClientHandler css4 = new QuorumClientHandler(s4, myMutexImpl);
+		QuorumClientHandler css5 = new QuorumClientHandler(s5, myMutexImpl);
 		Thread t1 = new Thread(css1);
 		Thread t2 = new Thread(css2);
 		Thread t4 = new Thread(css4);
@@ -362,7 +362,7 @@ public class Client3 {
 		}
 		if (Constants.READ.equalsIgnoreCase(TASK))
 			Utils.log(" *********>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" + "------->" + (counter + 1)
-					+ " Randomly Chosen, " + "TASK:" + TASK + " ," + Utils.getServerNameFromCode(SERVER) + " ,FILE:"
+					+ " Randomly Chosen, " + "TASK:" + TASK + " ," + Utils.getQuorumServerFromHost(SERVER) + " ,FILE:"
 					+ FILE);
 		else
 			Utils.log(" *********>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" + "------->" + (counter + 1)

@@ -3,7 +3,6 @@ package quorum.app.server.quorumServers;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-import quorum.app.fileServer.ServerHandler;
 import quorum.app.util.Constants;
 import quorum.app.util.Utils;
 
@@ -12,15 +11,15 @@ import quorum.app.util.Utils;
  */
 
 /**
- * Main class that runs the server. Provide the server number to start the
- * respective server
+ * Main class that runs the quorum servers. Provide the server number to start
+ * the respective server
  */
-public class Server {
+public class QuorumServer {
 	static int clientId = 1;
 
 	public static void main(String[] args) throws Exception {
 		if (args.length < 1) {
-			Utils.log("No Server ID provided.");
+			Utils.log("No Quorum Server ID provided.");
 			return;
 		}
 		String id = args[0];
@@ -34,6 +33,9 @@ public class Server {
 		} else if ("3".equals(id)) {
 			serverName = Constants.SERVER_3;
 			Utils.logWithSeparator("Starting Server:3");
+		} else if ("4".equals(id)) {
+			serverName = Constants.SERVER_4;
+			Utils.logWithSeparator("Starting Server:4");
 		}
 		ServerSocket ss = null;
 		Socket s = null;
@@ -43,7 +45,7 @@ public class Server {
 			while (true) {
 				s = ss.accept();
 				Utils.log("Client:" + clientId + " connected");
-				ServerHandler clientThread = new ServerHandler(s, serverName, clientId);
+				QuorumServerHandler clientThread = new QuorumServerHandler(s, serverName, clientId);
 				Thread t = new Thread(clientThread);
 				t.start();
 				clientId++;

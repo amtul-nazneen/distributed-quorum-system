@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 
-import quorum.app.client.ClientHandler;
+import quorum.app.client.QuorumClientHandler;
 import quorum.app.impl.MutualExclusionHelper;
 import quorum.app.impl.MutualExclusionImpl;
 import quorum.app.util.Constants;
@@ -28,14 +28,14 @@ public class Client2 {
 	int processnum = 2;
 	int counter = 0;
 
-	Socket server1 = null, server2 = null, server3 = null;
+	Socket server1 = null, server2 = null, server3 = null, server4 = null;
 	Socket s1, s3, s4, s5;
 	ServerSocket ss3, ss4, ss5;
 
 	PrintWriter w1, w3, w4, w5;
 	BufferedReader r1, r3, r4, r5;
-	PrintWriter writeToServer1, writeToServer2, writeToServer3;
-	BufferedReader readFromServer1, readFromServer2, readFromServer3;
+	PrintWriter writeToServer1, writeToServer2, writeToServer3, writeToServer4;
+	BufferedReader readFromServer1, readFromServer2, readFromServer3, readFromServer4;
 
 	ArrayList<String> serverFileList;
 	ArrayList<String> serverList;
@@ -59,29 +59,29 @@ public class Client2 {
 	public void startClient2() throws Exception {
 		Timestamp start = Utils.getTimestamp();
 		try {
+
 			connectToServer();
-			connectToOtherClients();
+			// connectToOtherClients();
 			createServerIOStream();
-			createChannelIOStream();
-			createMutexImplementor();
+			// createChannelIOStream();
+			// createMutexImplementor();
 			startChannelThreads();
-			init();
-			while (counter < Constants.CLIENT2_CSLIMIT) {
-				try {
-					setRandomRequestParams();
-					requestForCSaccess();
-					counter++;
-					Thread.sleep((long) (Math.random() * 1000));
-				} catch (Exception e) {
-					Utils.log(e.getMessage());
-				}
-			}
+			System.out.println("trying to write to qs threads...");
+			writeToServer3.write("hello server3 from client2");
+			writeToServer4.write("hello server4 from client2");
+			System.out.println("end of trying to write to qs threads...");
+			// init();
+			/*
+			 * while (counter < Constants.CLIENT1_CSLIMIT) { try { setRandomRequestParams();
+			 * requestForCSaccess(); counter++; Thread.sleep((long) (Math.random() * 1000));
+			 * } catch (Exception e) { Utils.log(e.getMessage()); } }
+			 */
 
 		} catch (Exception e) {
 			Utils.log(e.getMessage());
 		} finally {
 			if (Constants.ENABLE_SOCKET_CLOSE) {
-				while (Utils.checkTimeout(start, Utils.getTimestamp()) <= Constants.CLIENT_TIMEOUT + 6) {
+				while (Utils.checkTimeout(start, Utils.getTimestamp()) <= Constants.CLIENT_TIMEOUT + 8) {
 					Thread.sleep(30000);
 				}
 				Utils.log("Closing all sockets");
@@ -226,9 +226,9 @@ public class Client2 {
 	 * @throws Exception
 	 */
 	private void connectToServer() throws Exception {
-		server1 = new Socket(Constants.SERVER1_HOST, Constants.SERVER_PORT);
-		server2 = new Socket(Constants.SERVER2_HOST, Constants.SERVER_PORT);
-		server3 = new Socket(Constants.SERVER3_HOST, Constants.SERVER_PORT);
+		server3 = new Socket(Constants.QUORUM3_HOST, Constants.SERVER_PORT);
+		server4 = new Socket(Constants.QUORUM4_HOST, Constants.SERVER_PORT);
+		// server3 = new Socket(Constants.SERVER3_HOST, Constants.SERVER_PORT);
 	}
 
 	/**
@@ -237,11 +237,11 @@ public class Client2 {
 	 * @throws Exception
 	 */
 	private void connectToOtherClients() throws Exception {
-		s1 = new Socket(Constants.DC_PROC1, Constants.CLIENT2_PORT);
-
-		ss3 = new ServerSocket(Constants.CLIENT3_PORT);
-		ss4 = new ServerSocket(Constants.CLIENT4_PORT);
-		ss5 = new ServerSocket(Constants.CLIENT5_PORT);
+//		s1 = new Socket(Constants.CLIENT1, Constants.CLIENT2_PORT);
+//
+//		ss3 = new ServerSocket(Constants.CLIENT3_PORT);
+//		ss4 = new ServerSocket(Constants.CLIENT4_PORT);
+//		ss5 = new ServerSocket(Constants.CLIENT5_PORT);
 		s3 = ss3.accept();
 		s4 = ss4.accept();
 		s5 = ss5.accept();
@@ -254,10 +254,11 @@ public class Client2 {
 	 * @throws Exception
 	 */
 	private void createServerIOStream() throws Exception {
-		writeToServer1 = new PrintWriter(server1.getOutputStream(), true);
-		readFromServer1 = new BufferedReader(new InputStreamReader(server1.getInputStream()));
-		writeToServer2 = new PrintWriter(server2.getOutputStream(), true);
-		readFromServer2 = new BufferedReader(new InputStreamReader(server2.getInputStream()));
+		// writeToServer1 = new PrintWriter(server1.getOutputStream(), true);
+		// readFromServer1 = new BufferedReader(new
+		// InputStreamReader(server1.getInputStream()));
+		writeToServer4 = new PrintWriter(server4.getOutputStream(), true);
+		readFromServer4 = new BufferedReader(new InputStreamReader(server4.getInputStream()));
 		writeToServer3 = new PrintWriter(server3.getOutputStream(), true);
 		readFromServer3 = new BufferedReader(new InputStreamReader(server3.getInputStream()));
 	}
@@ -292,23 +293,24 @@ public class Client2 {
 	 * Method to start and run the channel threads
 	 */
 	private void startChannelThreads() {
-		ClientHandler css1 = new ClientHandler(s1, myMutexImpl);
+		// QuorumClientHandler css1 = new QuorumClientHandler(s1, myMutexImpl);
 
-		ClientHandler css3 = new ClientHandler(s3, myMutexImpl);
-		ClientHandler css4 = new ClientHandler(s4, myMutexImpl);
-		ClientHandler css5 = new ClientHandler(s5, myMutexImpl);
+		QuorumClientHandler css3 = new QuorumClientHandler(server3, myMutexImpl);
+		QuorumClientHandler css4 = new QuorumClientHandler(server4, myMutexImpl);
+		// QuorumClientHandler css5 = new QuorumClientHandler(s5, myMutexImpl);
 
-		Thread t1 = new Thread(css1);
+		// Thread t1 = new Thread(css1);
 
 		Thread t3 = new Thread(css3);
 		Thread t4 = new Thread(css4);
-		Thread t5 = new Thread(css5);
-
-		t1.start();
+		// Thread t5 = new Thread(css5);
+		Utils.log("Starting threads to server3 and server3");
+		// t1.start();
 
 		t3.start();
 		t4.start();
-		t5.start();
+
+		// t5.start();
 
 	}
 
@@ -371,7 +373,7 @@ public class Client2 {
 		}
 		if (Constants.READ.equalsIgnoreCase(TASK))
 			Utils.log(" *********>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" + "------->" + (counter + 1)
-					+ " Randomly Chosen, " + "TASK:" + TASK + " ," + Utils.getServerNameFromCode(SERVER) + " ,FILE:"
+					+ " Randomly Chosen, " + "TASK:" + TASK + " ," + Utils.getQuorumServerFromHost(SERVER) + " ,FILE:"
 					+ FILE);
 		else
 			Utils.log(" *********>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" + "------->" + (counter + 1)

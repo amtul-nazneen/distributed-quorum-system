@@ -19,20 +19,20 @@ public class Constants {
 
 	/* ------ Section II: Begin of DC machines to program model mapping ------ */
 	public static final int SERVER_PORT = 6666;
-	public static final int CLIENT2_PORT = 6662;
-	public static final int CLIENT3_PORT = 6663;
-	public static final int CLIENT4_PORT = 6664;
-	public static final int CLIENT5_PORT = 6665;
 
-	public static final String DC_PROC1 = "dc04.utdallas.edu";
-	public static final String DC_PROC2 = "dc05.utdallas.edu";
-	public static final String DC_PROC3 = "dc06.utdallas.edu";
-	public static final String DC_PROC4 = "dc07.utdallas.edu";
-	public static final String DC_PROC5 = "dc08.utdallas.edu";
+	public static final String CLIENT1 = "dc11.utdallas.edu";
+	public static final String CLIENT2 = "dc12.utdallas.edu";
+	public static final String CLIENT3 = "dc13.utdallas.edu";
+	public static final String CLIENT4 = "dc14.utdallas.edu";
+	public static final String CLIENT5 = "dc15.utdallas.edu";
 
-	public static final String SERVER1_HOST = "dc01.utdallas.edu";
-	public static final String SERVER2_HOST = "dc02.utdallas.edu";
-	public static final String SERVER3_HOST = "dc03.utdallas.edu";
+	public static final String QUORUM1_HOST = "dc01.utdallas.edu";
+	public static final String QUORUM2_HOST = "dc02.utdallas.edu";
+	public static final String QUORUM3_HOST = "dc03.utdallas.edu";
+	public static final String QUORUM4_HOST = "dc04.utdallas.edu";
+	public static final String QUORUM5_HOST = "dc05.utdallas.edu";
+	public static final String QUORUM6_HOST = "dc06.utdallas.edu";
+	public static final String QUORUM7_HOST = "dc07.utdallas.edu";
 	/*
 	 * ------ Section III: Begin of: Thread.sleep value for each client, between
 	 * critical sections ------
@@ -45,7 +45,7 @@ public class Constants {
 	/*
 	 * ------ Section IV: Begin of:Misc. configurations ------
 	 */
-	public static final boolean ENABLE_SOCKET_CLOSE = true;
+	public static final boolean ENABLE_SOCKET_CLOSE = false;
 	public static final int CLIENT_TIMEOUT = 10;
 	public static final int SERVER_TIMEOUT = 20;
 	/*
@@ -60,6 +60,7 @@ public class Constants {
 	public static final String SERVER_1 = "s1";
 	public static final String SERVER_2 = "s2";
 	public static final String SERVER_3 = "s3";
+	public static final String SERVER_4 = "s4";
 
 	public static final String FOLDER_PATH = "/home/eng/a/axn180041/mutex/";
 	public static final String FILE_EXT = ".txt";
@@ -79,5 +80,13 @@ public class Constants {
 
 	public static final String FORMAT = "yyyy-MM-dd HH:mm:ss.SSS";
 	public static final String ZONE = "GMT-05:00";
+
+	/*
+	 * ------ QUORUM BEGINS
+	 */
+	public static final String LOCKED = "locked";
+	public static final String UNLOCKED = "unlocked";
+	public static final String GRANT = "grant";
+	public static final String RELEASE = "release";
 
 }

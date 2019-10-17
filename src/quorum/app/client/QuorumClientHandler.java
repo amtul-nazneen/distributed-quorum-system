@@ -5,11 +5,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.sql.Timestamp;
 
 import quorum.app.impl.MutualExclusionImpl;
-import quorum.app.util.Constants;
-import quorum.app.util.Utils;
 
 /**
  * @author amtul.nazneen
@@ -19,7 +16,7 @@ import quorum.app.util.Utils;
  * Thread Class that handles incoming and outgoing request from the responsible
  * client
  */
-public class ClientHandler implements Runnable {
+public class QuorumClientHandler implements Runnable {
 	BufferedReader reader;
 	PrintWriter writer;
 	Socket socket;
@@ -32,7 +29,7 @@ public class ClientHandler implements Runnable {
 	 * @param s:         Socket connection between the clients
 	 * @param mutexImpl: mutex object of each client
 	 */
-	public ClientHandler(Socket s, MutualExclusionImpl mutexImpl) {
+	public QuorumClientHandler(Socket s, MutualExclusionImpl mutexImpl) {
 		super();
 		this.socket = s;
 		this.mutexImpl = mutexImpl;
@@ -51,23 +48,25 @@ public class ClientHandler implements Runnable {
 	@Override
 	public void run() {
 		{
+			System.out.println("Running threads from clients to quorum servers:" + socket.getInetAddress());
 			String message;
 			try {
+				System.out.println("Reader is:" + reader);
 				while (reader != null && (message = reader.readLine()) != null) {
 
-					String tokens[] = message.split(",");
-					String messageType = tokens[0];
-
-					String host = socket.getInetAddress().getHostName().toUpperCase();
-					host = Utils.getProcessFromHost(host);
-
-					if (messageType.equals(Constants.REQUEST)) {
-						mutexImpl.myReceivedRequest(Timestamp.valueOf(tokens[1]), Integer.parseInt(tokens[2]),
-								tokens[3]);
-					} else if (messageType.equals(Constants.REPLY)) {
-						Utils.log("-->Received REPLY" + " from " + host);
-						mutexImpl.myReceivedReply();
-					}
+					/*
+					 * String tokens[] = message.split(","); String messageType = tokens[0];
+					 * 
+					 * String host = socket.getInetAddress().getHostName().toUpperCase(); host =
+					 * Utils.getProcessFromHost(host);
+					 * 
+					 * if (messageType.equals(Constants.REQUEST)) {
+					 * mutexImpl.myReceivedRequest(Timestamp.valueOf(tokens[1]),
+					 * Integer.parseInt(tokens[2]), tokens[3]); } else if
+					 * (messageType.equals(Constants.REPLY)) { Utils.log("-->Received REPLY" +
+					 * " from " + host); mutexImpl.myReceivedReply(); }
+					 */
+					System.out.println("Received message from server:--->" + message);
 				}
 
 			} catch (IOException e) {

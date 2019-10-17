@@ -21,7 +21,9 @@ import java.util.HashMap;
 public class Utils {
 
 	public static HashMap<String, String> hosttoprocess = new HashMap<String, String>();
+	public static HashMap<String, Integer> hosttoclientid = new HashMap<String, Integer>();
 	public static HashMap<String, String> serverToName = new HashMap<String, String>();
+	public static HashMap<Integer, String> clientidtoprocess = new HashMap<Integer, String>();
 
 	public static String getTimestampForLog() {
 		LocalDateTime date = LocalDateTime.now(ZoneId.of(Constants.ZONE));
@@ -48,20 +50,42 @@ public class Utils {
 		}
 	}
 
-	public static String getProcessFromHost(String host) {
-		hosttoprocess.put(Constants.DC_PROC1, "Process:1");
-		hosttoprocess.put(Constants.DC_PROC2, "Process:2");
-		hosttoprocess.put(Constants.DC_PROC3, "Process:3");
-		hosttoprocess.put(Constants.DC_PROC4, "Process:4");
-		hosttoprocess.put(Constants.DC_PROC5, "Process:5");
+	public static String getClientFromHost(String host) {
+		hosttoprocess.put(Constants.CLIENT1, "Process:1");
+		hosttoprocess.put(Constants.CLIENT2, "Process:2");
+		hosttoprocess.put(Constants.CLIENT3, "Process:3");
+		hosttoprocess.put(Constants.CLIENT4, "Process:4");
+		hosttoprocess.put(Constants.CLIENT5, "Process:5");
 		return hosttoprocess.get(host.toLowerCase());
 	}
 
-	public static String getServerNameFromCode(String code) {
-		serverToName.put(Constants.SERVER_1, "Server:1");
-		serverToName.put(Constants.SERVER_2, "Server:2");
-		serverToName.put(Constants.SERVER_3, "Server:3");
-		return serverToName.get(code);
+	public static String getClientFromID(int id) {
+		clientidtoprocess.put(1, "Process:1");
+		clientidtoprocess.put(2, "Process:2");
+		clientidtoprocess.put(3, "Process:3");
+		clientidtoprocess.put(4, "Process:4");
+		clientidtoprocess.put(5, "Process:5");
+		return clientidtoprocess.get(id);
+	}
+
+	public static int getClientIDFromHost(String host) {
+		hosttoclientid.put(Constants.CLIENT1, 1);
+		hosttoclientid.put(Constants.CLIENT2, 2);
+		hosttoclientid.put(Constants.CLIENT3, 3);
+		hosttoclientid.put(Constants.CLIENT4, 4);
+		hosttoclientid.put(Constants.CLIENT5, 5);
+		return hosttoclientid.get(host.toLowerCase());
+	}
+
+	public static String getQuorumServerFromHost(String host) {
+		serverToName.put(Constants.QUORUM1_HOST, "Quorum:1");
+		serverToName.put(Constants.QUORUM2_HOST, "Quorum:2");
+		serverToName.put(Constants.QUORUM3_HOST, "Quorum:3");
+		serverToName.put(Constants.QUORUM4_HOST, "Quorum:4");
+		serverToName.put(Constants.QUORUM5_HOST, "Quorum:5");
+		serverToName.put(Constants.QUORUM6_HOST, "Quorum:6");
+		serverToName.put(Constants.QUORUM7_HOST, "Quorum:7");
+		return serverToName.get(host);
 	}
 
 	public static Timestamp getTimestamp() {
@@ -95,5 +119,23 @@ public class Utils {
 		int seconds = (int) ms / 1000;
 		int minutes = (seconds % 3600) / 60;
 		return minutes;
+	}
+
+	public static void printServerStart(String id) {
+		if ("1".equals(id)) {
+			Utils.logWithSeparator("Starting Server:1");
+		} else if ("2".equals(id)) {
+			Utils.logWithSeparator("Starting Server:2");
+		} else if ("3".equals(id)) {
+			Utils.logWithSeparator("Starting Server:4");
+		} else if ("4".equals(id)) {
+			Utils.logWithSeparator("Starting Server:5");
+		} else if ("5".equals(id)) {
+			Utils.logWithSeparator("Starting Server:6");
+		} else if ("6".equals(id)) {
+			Utils.logWithSeparator("Starting Server:7");
+		} else if ("7".equals(id)) {
+			Utils.logWithSeparator("Starting Server:8");
+		}
 	}
 }
