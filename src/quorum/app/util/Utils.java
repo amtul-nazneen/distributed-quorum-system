@@ -121,21 +121,4 @@ public class Utils {
 		return minutes;
 	}
 
-	public static void printServerStart(String id) {
-		if ("1".equals(id)) {
-			Utils.logWithSeparator("Starting Quorum Server:1");
-		} else if ("2".equals(id)) {
-			Utils.logWithSeparator("Starting Quorum Server:2");
-		} else if ("3".equals(id)) {
-			Utils.logWithSeparator("Starting Quorum Server:3");
-		} else if ("4".equals(id)) {
-			Utils.logWithSeparator("Starting Quorum Server:3");
-		} else if ("5".equals(id)) {
-			Utils.logWithSeparator("Starting Quorum Server:5");
-		} else if ("6".equals(id)) {
-			Utils.logWithSeparator("Starting Quorum Server:6");
-		} else if ("7".equals(id)) {
-			Utils.logWithSeparator("Starting Quorum Server:7");
-		}
-	}
 }

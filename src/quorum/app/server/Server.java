@@ -12,26 +12,26 @@ public class Server {
 
 	public static void main(String[] args) throws Exception {
 		Utils.logWithSeparator("Starting File Server");
-		ServerSocket ss = null;
-		Socket s = null;
+		ServerSocket serverSocket = null;
+		Socket socket = null;
 
 		try {
-			ss = new ServerSocket(Constants.SERVER_PORT);
+			serverSocket = new ServerSocket(Constants.SERVER_PORT);
 			while (true) {
-				s = ss.accept();
-				DataInputStream dis = new DataInputStream(s.getInputStream());
-				DataOutputStream dos = new DataOutputStream(s.getOutputStream());
-				ServerRequestHandler clientThread = new ServerRequestHandler(s,
-						Utils.getClientFromHost(s.getInetAddress().getHostName()), dis, dos);
-				Thread t = new Thread(clientThread);
-				t.start();
+				socket = serverSocket.accept();
+				DataInputStream dis = new DataInputStream(socket.getInputStream());
+				DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
+				ServerRequestHandler connectedClient = new ServerRequestHandler(socket,
+						Utils.getClientFromHost(socket.getInetAddress().getHostName()), dis, dos);
+				Thread clientThread = new Thread(connectedClient);
+				clientThread.start();
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 
 		} finally {
-			s.close();
-			ss.close();
+			socket.close();
+			serverSocket.close();
 		}
 	}
 }

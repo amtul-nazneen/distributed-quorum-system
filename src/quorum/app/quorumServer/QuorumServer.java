@@ -16,24 +16,24 @@ public class QuorumServer {
 			return;
 		}
 		String id = args[0];
-		Utils.printServerStart(id);
+		Utils.logWithSeparator("Starting Quorum Server:" + id);
 
-		ServerSocket ss = new ServerSocket(Constants.SERVER_PORT);
-		QuorumMutexImpl s1 = new QuorumMutexImpl();
+		ServerSocket quorumSocket = new ServerSocket(Constants.SERVER_PORT);
+		QuorumMutexImpl quorumMutex = new QuorumMutexImpl();
 		while (true) {
-			Socket s = null;
+			Socket socket = null;
 			try {
-				s = ss.accept();
-				String clientHost = s.getInetAddress().getHostName();
-				Utils.log("New Connection --****---" + Utils.getClientFromHost(clientHost));
-				DataInputStream dis = new DataInputStream(s.getInputStream());
-				DataOutputStream dos = new DataOutputStream(s.getOutputStream());
-				s1.updateClientDosMap(dos, Utils.getClientIDFromHost(clientHost));
-				Thread t = new QuorumRequestHandler(s, dis, dos, s1);
-				t.start();
+				socket = quorumSocket.accept();
+				String clientHost = socket.getInetAddress().getHostName();
+				Utils.log("New Connection ----->" + Utils.getClientFromHost(clientHost));
+				DataInputStream dis = new DataInputStream(socket.getInputStream());
+				DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
+				quorumMutex.updateClientDosMap(dos, Utils.getClientIDFromHost(clientHost));
+				Thread quorumClientThread = new QuorumRequestHandler(socket, dis, dos, quorumMutex);
+				quorumClientThread.start();
 
 			} catch (Exception e) {
-				s.close();
+				socket.close();
 				e.printStackTrace();
 			}
 		}

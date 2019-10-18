@@ -56,12 +56,12 @@ public class ClientRequestHandler implements Runnable {
 						String operation = tokens[0];
 						String grantTimestamp = tokens[1];
 						if (Constants.GRANT.equalsIgnoreCase(operation)) {
-							Utils.log("Before count:" + ci.getPendingQuorumReply());
+							// Utils.log("Before count:" + ci.getPendingQuorumReply());
 							Utils.log("Received GRANT from :------>"
 									+ Utils.getQuorumServerFromHost(socket.getInetAddress().getHostName()) + " at "
 									+ grantTimestamp);
 							ci.updatePendingQuorumReply();
-							Utils.log("After count:" + ci.getPendingQuorumReply());
+							// Utils.log("After count:" + ci.getPendingQuorumReply());
 						}
 					}
 				}

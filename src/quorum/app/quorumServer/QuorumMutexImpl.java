@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 
+import quorum.app.util.Constants;
 import quorum.app.util.Utils;
 
 public class QuorumMutexImpl {
@@ -14,7 +15,7 @@ public class QuorumMutexImpl {
 
 	public QuorumMutexImpl() {
 		super();
-		this.state = "UNLOCKED";
+		this.state = Constants.UNLOCKED;
 		this.queuedRequest = new ArrayList<QuorumQueuedRequest>();
 		this.clientDosMap = new HashMap<Integer, DataOutputStream>();
 	}
@@ -44,16 +45,15 @@ public class QuorumMutexImpl {
 	}
 
 	public QuorumQueuedRequest chooseFromDeferredQueue() {
-		Collections.sort(queuedRequest, QuorumQueuedRequest.DREP_COMP);
+		Collections.sort(queuedRequest, QuorumQueuedRequest.QUORUM_REQ_COMP);
 		QuorumQueuedRequest chosenRequest = queuedRequest.get(0);
-		Utils.log("Next request served is:--->" + chosenRequest.getProcessNum() + "[][] made at "
-				+ chosenRequest.getTimestamp());
+		Utils.log("Next request served is:----->" + chosenRequest.getProcessNum() + "," + chosenRequest.getTimestamp());
 		return chosenRequest;
 	}
 
 	public void deleteFromQuorumQueuedRequest() {
 		this.queuedRequest.remove(0);
-		Utils.log("Removed the served request, QuorumQueuedRequest size:-- " + this.queuedRequest.size());
+		Utils.log("Removed the served request, QuorumQueue size:-----> " + this.queuedRequest.size());
 
 	}
 

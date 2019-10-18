@@ -45,7 +45,7 @@ public class ServerRequestHandler implements Runnable {
 				String tokens[] = message.split(",");
 				String clientID = tokens[0];
 				String timestamp = tokens[1];
-				Utils.log("received a write from client:------>" + clientName);
+				Utils.log("Received WRITE from:------>" + clientName);
 				String accessFile = Constants.FOLDER_PATH + Constants.SERVER_0 + "/" + Constants.FILE0_NAME;
 				File f = new File(accessFile);
 				FileWriter fw = new FileWriter(f, true);
@@ -54,7 +54,7 @@ public class ServerRequestHandler implements Runnable {
 						+ " at " + timestamp + Constants.EOL);
 				filewriter.close();
 				fw.close();
-				Utils.log("Done Writing, sending success to--->" + clientName);
+				Utils.log("Sending SUCCESS to:------>" + clientName);
 				dos.writeUTF(Constants.SERVER_SUCCESS);
 			}
 		} catch (Exception e) {

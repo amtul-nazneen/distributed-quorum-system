@@ -54,7 +54,7 @@ public class QuorumQueuedRequest implements Comparable<QuorumQueuedRequest> {
 	 * Comparator class to sort the deferred reply queues. First sorted based on
 	 * timestamp and then process num, if timestamps are the same
 	 */
-	public static final Comparator<QuorumQueuedRequest> DREP_COMP = new Comparator<QuorumQueuedRequest>() {
+	public static final Comparator<QuorumQueuedRequest> QUORUM_REQ_COMP = new Comparator<QuorumQueuedRequest>() {
 
 		@Override
 		public int compare(QuorumQueuedRequest o1, QuorumQueuedRequest o2) {
