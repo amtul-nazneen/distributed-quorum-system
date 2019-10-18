@@ -14,7 +14,7 @@ public class Server {
 		Utils.logWithSeparator("Starting File Server");
 		ServerSocket serverSocket = null;
 		Socket socket = null;
-
+		ClientRequestCounter clientReqCounter = new ClientRequestCounter();
 		try {
 			serverSocket = new ServerSocket(Constants.SERVER_PORT);
 			while (true) {
@@ -22,7 +22,7 @@ public class Server {
 				DataInputStream dis = new DataInputStream(socket.getInputStream());
 				DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
 				ServerRequestHandler connectedClient = new ServerRequestHandler(socket,
-						Utils.getClientFromHost(socket.getInetAddress().getHostName()), dis, dos);
+						Utils.getClientFromHost(socket.getInetAddress().getHostName()), dis, dos, clientReqCounter);
 				Thread clientThread = new Thread(connectedClient);
 				clientThread.start();
 			}

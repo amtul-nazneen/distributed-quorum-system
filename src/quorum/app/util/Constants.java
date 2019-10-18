@@ -34,17 +34,13 @@ public class Constants {
 	 * ------ Section III: Begin of: Thread.sleep value for each client, between
 	 * critical sections ------
 	 */
-	public static final int CLIENT1_CSEXEC = 3000;
-	public static final int CLIENT2_CSEXEC = 2000;
-	public static final int CLIENT3_CSEXEC = 3500;
-	public static final int CLIENT4_CSEXEC = 4000;
-	public static final int CLIENT5_CSEXEC = 5000;
 	/*
 	 * ------ Section IV: Begin of:Misc. configurations ------
 	 */
 	public static final boolean ENABLE_SOCKET_CLOSE = false;
 	public static final int CLIENT_TIMEOUT = 10;
 	public static final int SERVER_TIMEOUT = 20;
+	public static final int TOTAL_REQUESTS = 20;
 	/*
 	 * ------ Section V: Begin of:Misc. configurations ------
 	 */

@@ -28,7 +28,7 @@ public class Client {
 
 	public void startClient() throws Exception {
 		Utils.logWithSeparator("Starting Client ID:" + clientID);
-		csRequestCount = 1;
+		csRequestCount = 0;
 		try {
 			ClientMutexImpl clientMutex = new ClientMutexImpl(getClientID());
 			/*
@@ -55,52 +55,67 @@ public class Client {
 			 * ------------------------ CONNECTION TO QUORUM SERVER 3
 			 * ---------------------------------------------------
 			 */
-			Socket socketQuorum3 = new Socket(Constants.QUORUM3_HOST, Constants.SERVER_PORT);
-			DataOutputStream dosQuorum3 = new DataOutputStream(socketQuorum3.getOutputStream());
-			ClientRequestHandler reqHandlerQuorum3 = new ClientRequestHandler(socketQuorum3, clientMutex);
-			Thread threadQuroum3 = new Thread(reqHandlerQuorum3);
-			threadQuroum3.start();
-			Utils.log("Connected to: " + Utils.getQuorumServerFromHost(Constants.QUORUM3_HOST));
+			/*
+			 * Socket socketQuorum3 = new Socket(Constants.QUORUM3_HOST,
+			 * Constants.SERVER_PORT); DataOutputStream dosQuorum3 = new
+			 * DataOutputStream(socketQuorum3.getOutputStream()); ClientRequestHandler
+			 * reqHandlerQuorum3 = new ClientRequestHandler(socketQuorum3, clientMutex);
+			 * Thread threadQuroum3 = new Thread(reqHandlerQuorum3); threadQuroum3.start();
+			 * Utils.log("Connected to: " +
+			 * Utils.getQuorumServerFromHost(Constants.QUORUM3_HOST));
+			 */
 			/*
 			 * ------------------------ CONNECTION TO QUORUM SERVER 4
 			 * ---------------------------------------------------
 			 */
-			Socket socketQuorum4 = new Socket(Constants.QUORUM4_HOST, Constants.SERVER_PORT);
-			DataOutputStream dosQuorum4 = new DataOutputStream(socketQuorum4.getOutputStream());
-			ClientRequestHandler reqHandlerQuorum4 = new ClientRequestHandler(socketQuorum4, clientMutex);
-			Thread threadQuroum4 = new Thread(reqHandlerQuorum4);
-			threadQuroum4.start();
-			Utils.log("Connected to: " + Utils.getQuorumServerFromHost(Constants.QUORUM4_HOST));
+			/*
+			 * Socket socketQuorum4 = new Socket(Constants.QUORUM4_HOST,
+			 * Constants.SERVER_PORT); DataOutputStream dosQuorum4 = new
+			 * DataOutputStream(socketQuorum4.getOutputStream()); ClientRequestHandler
+			 * reqHandlerQuorum4 = new ClientRequestHandler(socketQuorum4, clientMutex);
+			 * Thread threadQuroum4 = new Thread(reqHandlerQuorum4); threadQuroum4.start();
+			 * Utils.log("Connected to: " +
+			 * Utils.getQuorumServerFromHost(Constants.QUORUM4_HOST));
+			 */
 			/*
 			 * ------------------------ CONNECTION TO QUORUM SERVER 5
 			 * ---------------------------------------------------
 			 */
-			Socket socketQuorum5 = new Socket(Constants.QUORUM5_HOST, Constants.SERVER_PORT);
-			DataOutputStream dosQuorum5 = new DataOutputStream(socketQuorum5.getOutputStream());
-			ClientRequestHandler reqHandlerQuorum5 = new ClientRequestHandler(socketQuorum5, clientMutex);
-			Thread threadQuroum5 = new Thread(reqHandlerQuorum5);
-			threadQuroum5.start();
-			Utils.log("Connected to: " + Utils.getQuorumServerFromHost(Constants.QUORUM5_HOST));
+			/*
+			 * Socket socketQuorum5 = new Socket(Constants.QUORUM5_HOST,
+			 * Constants.SERVER_PORT); DataOutputStream dosQuorum5 = new
+			 * DataOutputStream(socketQuorum5.getOutputStream()); ClientRequestHandler
+			 * reqHandlerQuorum5 = new ClientRequestHandler(socketQuorum5, clientMutex);
+			 * Thread threadQuroum5 = new Thread(reqHandlerQuorum5); threadQuroum5.start();
+			 * Utils.log("Connected to: " +
+			 * Utils.getQuorumServerFromHost(Constants.QUORUM5_HOST));
+			 */
 			/*
 			 * ------------------------ CONNECTION TO QUORUM SERVER 6
 			 * ---------------------------------------------------
 			 */
-			Socket socketQuorum6 = new Socket(Constants.QUORUM6_HOST, Constants.SERVER_PORT);
-			DataOutputStream dosQuorum6 = new DataOutputStream(socketQuorum6.getOutputStream());
-			ClientRequestHandler reqHandlerQuorum6 = new ClientRequestHandler(socketQuorum6, clientMutex);
-			Thread threadQuroum6 = new Thread(reqHandlerQuorum6);
-			threadQuroum6.start();
-			Utils.log("Connected to: " + Utils.getQuorumServerFromHost(Constants.QUORUM6_HOST));
+			/*
+			 * Socket socketQuorum6 = new Socket(Constants.QUORUM6_HOST,
+			 * Constants.SERVER_PORT); DataOutputStream dosQuorum6 = new
+			 * DataOutputStream(socketQuorum6.getOutputStream()); ClientRequestHandler
+			 * reqHandlerQuorum6 = new ClientRequestHandler(socketQuorum6, clientMutex);
+			 * Thread threadQuroum6 = new Thread(reqHandlerQuorum6); threadQuroum6.start();
+			 * Utils.log("Connected to: " +
+			 * Utils.getQuorumServerFromHost(Constants.QUORUM6_HOST));
+			 */
 			/*
 			 * ------------------------ CONNECTION TO QUORUM SERVER 7
 			 * ---------------------------------------------------
 			 */
-			Socket socketQuorum7 = new Socket(Constants.QUORUM7_HOST, Constants.SERVER_PORT);
-			DataOutputStream dosQuorum7 = new DataOutputStream(socketQuorum7.getOutputStream());
-			ClientRequestHandler reqHandlerQuorum7 = new ClientRequestHandler(socketQuorum7, clientMutex);
-			Thread threadQuroum7 = new Thread(reqHandlerQuorum7);
-			threadQuroum7.start();
-			Utils.log("Connected to: " + Utils.getQuorumServerFromHost(Constants.QUORUM7_HOST));
+			/*
+			 * Socket socketQuorum7 = new Socket(Constants.QUORUM7_HOST,
+			 * Constants.SERVER_PORT); DataOutputStream dosQuorum7 = new
+			 * DataOutputStream(socketQuorum7.getOutputStream()); ClientRequestHandler
+			 * reqHandlerQuorum7 = new ClientRequestHandler(socketQuorum7, clientMutex);
+			 * Thread threadQuroum7 = new Thread(reqHandlerQuorum7); threadQuroum7.start();
+			 * Utils.log("Connected to: " +
+			 * Utils.getQuorumServerFromHost(Constants.QUORUM7_HOST));
+			 */
 			/*
 			 * ------------------------ CONNECTION TO QUORUM SERVER 8
 			 * ---------------------------------------------------
@@ -110,23 +125,35 @@ public class Client {
 			DataInputStream disFileServer = new DataInputStream(socketFileServer.getInputStream());
 			Utils.log("Connected to: " + Utils.getFileServerFromHost());
 
-			while (true) {
-				Thread.sleep((long) (Math.random() * 10000));
+			boolean requestsCompleted = false;
+			while (!requestsCompleted) {
+				csRequestCount++;
+				Thread.sleep((long) (Math.random() * 1000));
 				Utils.log("CS Access Requesting------>" + csRequestCount);
 				// TODO get the quorum
 				// TODO set remreply value in quorum
-				int quorumSize = 7;
+				int quorumSize = 2;
 				Timestamp myRequestTime = Utils.getTimestamp();
-				clientMutex.mapQuorumDOS(dosQuorum1, dosQuorum2, dosQuorum3, dosQuorum4, dosQuorum5, dosQuorum6,
-						dosQuorum7);
+				clientMutex.mapQuorumDOS(dosQuorum1, dosQuorum2);// , dosQuorum3, dosQuorum4, dosQuorum5, dosQuorum6,
+				// dosQuorum7);
 
 				clientMutex.myCSRequestBegin(myRequestTime, quorumSize);
 
 				executeCS(socketFileServer, dosFileServer, disFileServer);
 
-				Thread.sleep(getClientID() * 3000);
+				Thread.sleep((long) Math.random() * 1000);
 				clientMutex.sendRelease();
-				csRequestCount++;
+				if (csRequestCount == 20) {
+					requestsCompleted = true;
+					Utils.log("Requests completed. Sending Notification to Server");
+				}
+			}
+
+			boolean gotAck = false;
+			while (!gotAck) {
+				Thread.sleep((long) Math.random() * 10000);
+				Utils.log("Waiting for acknowledgement from Server");
+				// TODO
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

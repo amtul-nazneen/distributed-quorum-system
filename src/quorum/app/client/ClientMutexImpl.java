@@ -63,16 +63,16 @@ public class ClientMutexImpl {
 		}
 	}
 
-	public void mapQuorumDOS(DataOutputStream dos1, DataOutputStream dos2, DataOutputStream dos3, DataOutputStream dos4,
-			DataOutputStream dos5, DataOutputStream dos6, DataOutputStream dos7) {
+	public void mapQuorumDOS(DataOutputStream dos1, DataOutputStream dos2) {// , DataOutputStream dos3, DataOutputStream
+																			// dos4,
+		// DataOutputStream dos5, DataOutputStream dos6, DataOutputStream dos7) {
 		docsForQuorum.clear();
 		docsForQuorum.put(1, dos1);
 		docsForQuorum.put(2, dos2);
-		docsForQuorum.put(3, dos3);
-		docsForQuorum.put(4, dos4);
-		docsForQuorum.put(5, dos5);
-		docsForQuorum.put(6, dos6);
-		docsForQuorum.put(7, dos7);
+		/*
+		 * docsForQuorum.put(3, dos3); docsForQuorum.put(4, dos4); docsForQuorum.put(5,
+		 * dos5); docsForQuorum.put(6, dos6); docsForQuorum.put(7, dos7);
+		 */
 		// TODO: clear hashmap and add quorum worth writers
 	}
 

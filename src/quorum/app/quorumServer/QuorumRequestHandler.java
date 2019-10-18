@@ -37,37 +37,61 @@ class QuorumRequestHandler extends Thread {
 					Utils.log("Received REQUEST from :--------->" + Utils.getClientFromHost(clientHost) + " at "
 							+ requestTimestamp);
 					if (quorumMutex.getState().equalsIgnoreCase(Constants.UNLOCKED)) {
-						Utils.log("State is UNLOCKED, Sending a GRANT");
-						Timestamp grantTimestamp = Utils.getTimestamp();
-						dos.writeUTF(Constants.GRANT + "," + grantTimestamp);
+						Utils.log("State is UNLOCKED. Changing to LOCKED and Sending a GRANT");
+						/* ---- ------- Setting state to locked------ ------ */
 						quorumMutex.setState(Constants.LOCKED);
+						Timestamp grantTimestamp = Utils.getTimestamp();
+						/* ---- ------- Sending a grant------ ------ */
+						dos.writeUTF(Constants.GRANT + "," + grantTimestamp);
 						Utils.log("Sent GRANT to :--------->" + Utils.getClientFromHost(clientHost) + " at "
 								+ grantTimestamp);
 						Utils.log("My State:--------->" + quorumMutex.getState().toUpperCase());
 					} else {
 						Utils.log("State is LOCKED,Adding to queue");
-						quorumMutex.getQueuedRequest().add(new QuorumQueuedRequest(Utils.getClientIDFromHost(clientHost),
-								Timestamp.valueOf(requestTimestamp)));
+						quorumMutex.getQueuedRequest().add(new QuorumQueuedRequest(
+								Utils.getClientIDFromHost(clientHost), Timestamp.valueOf(requestTimestamp)));
 					}
 				} else if (Constants.RELEASE.equalsIgnoreCase(operation)) {
 					Utils.log("Received RELEASE from :--------->" + Utils.getClientFromHost(clientHost) + " at "
 							+ requestTimestamp);
-					quorumMutex.setState(Constants.UNLOCKED);
-					if (quorumMutex.getQueuedRequest() != null && !quorumMutex.getQueuedRequest().isEmpty()) {
-						QuorumQueuedRequest chosenRequest = quorumMutex.chooseFromDeferredQueue();
-						DataOutputStream dos = quorumMutex.getClientDosMap().get(chosenRequest.getProcessNum());
-						Timestamp grantTimestamp = Utils.getTimestamp();
-						dos.writeUTF(Constants.GRANT + "," + grantTimestamp);
-						quorumMutex.setState(Constants.LOCKED);
-						quorumMutex.deleteFromQuorumQueuedRequest();
-						Utils.log("Picked a request from Queue");
-						Utils.log("Sent GRANT to :--------->" + Utils.getClientFromID(chosenRequest.getProcessNum())
-								+ " at " + grantTimestamp);
-						Utils.log("My State:--------->" + quorumMutex.getState().toUpperCase());
-					} else {
-						Utils.log("Request queue is empty. Stay UNLOCKED");
-						Utils.log("My State:--------->" + quorumMutex.getState().toUpperCase());
+					if (Constants.LOCKED.equalsIgnoreCase(quorumMutex.getState())) {
+						if (quorumMutex.getQueuedRequest() != null && !quorumMutex.getQueuedRequest().isEmpty()) {
+							/* ---- ------- Chosing a request from queue------ ------ */
+							QuorumQueuedRequest chosenRequest = quorumMutex.chooseFromDeferredQueue();
+							DataOutputStream dos = quorumMutex.getClientDosMap().get(chosenRequest.getProcessNum());
+							/* ---- ------- Sending grant------ ------ */
+							Timestamp grantTimestamp = Utils.getTimestamp();
+							dos.writeUTF(Constants.GRANT + "," + grantTimestamp);
+							quorumMutex.deleteFromQuorumQueuedRequest();
+							Utils.log("State is LOCKED. Picked a request from Queue. Sent GRANT to :--------->"
+									+ Utils.getClientFromID(chosenRequest.getProcessNum()) + " at " + grantTimestamp);
+							Utils.log("My State:--------->" + quorumMutex.getState().toUpperCase());
+						} else {
+							Utils.log("Request queue is empty. Changing state to UNLOCKED");
+							/* ---- ------- Setting state to unlocked------ ------ */
+							quorumMutex.setState(Constants.UNLOCKED);
+							Utils.log("My State:--------->" + quorumMutex.getState().toUpperCase());
+						}
 					}
+
+					/*
+					 * Utils.log("Received RELEASE from :--------->" +
+					 * Utils.getClientFromHost(clientHost) + " at " + requestTimestamp);
+					 * quorumMutex.setState(Constants.UNLOCKED); if (quorumMutex.getQueuedRequest()
+					 * != null && !quorumMutex.getQueuedRequest().isEmpty()) { QuorumQueuedRequest
+					 * chosenRequest = quorumMutex.chooseFromDeferredQueue(); DataOutputStream dos =
+					 * quorumMutex.getClientDosMap().get(chosenRequest.getProcessNum()); Timestamp
+					 * grantTimestamp = Utils.getTimestamp(); dos.writeUTF(Constants.GRANT + "," +
+					 * grantTimestamp); quorumMutex.setState(Constants.LOCKED);
+					 * quorumMutex.deleteFromQuorumQueuedRequest();
+					 * Utils.log("Picked a request from Queue");
+					 * Utils.log("Sent GRANT to :--------->" +
+					 * Utils.getClientFromID(chosenRequest.getProcessNum()) + " at " +
+					 * grantTimestamp); Utils.log("My State:--------->" +
+					 * quorumMutex.getState().toUpperCase()); } else {
+					 * Utils.log("Request queue is empty. Stay UNLOCKED");
+					 * Utils.log("My State:--------->" + quorumMutex.getState().toUpperCase()); }
+					 */
 				}
 			} catch (IOException e) {
 				e.printStackTrace();

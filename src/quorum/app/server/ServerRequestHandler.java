@@ -15,6 +15,7 @@ public class ServerRequestHandler implements Runnable {
 	final DataInputStream dis;
 	final DataOutputStream dos;
 	String clientName;
+	ClientRequestCounter clientReqCounter;
 
 	/**
 	 * Constructor for creating a handler for communication between the server and
@@ -24,12 +25,14 @@ public class ServerRequestHandler implements Runnable {
 	 * @param serverName
 	 * @param clientId
 	 */
-	public ServerRequestHandler(Socket socket, String clientName, DataInputStream dis, DataOutputStream dos) {
+	public ServerRequestHandler(Socket socket, String clientName, DataInputStream dis, DataOutputStream dos,
+			ClientRequestCounter clientReqCounter) {
 		super();
 		this.socket = socket;
 		this.clientName = clientName;
 		this.dis = dis;
 		this.dos = dos;
+		this.clientReqCounter = clientReqCounter;
 	}
 
 	/**
@@ -40,12 +43,15 @@ public class ServerRequestHandler implements Runnable {
 	public void run() {
 		String message;
 		try {
-			while (true) {
+			boolean allClientRequestsCompleted = false;
+			while (!allClientRequestsCompleted) {
 				message = dis.readUTF();
 				String tokens[] = message.split(",");
 				String clientID = tokens[0];
 				String timestamp = tokens[1];
-				Utils.log("Received WRITE from:------>" + clientName);
+				clientReqCounter.updateClientReqMap(Integer.valueOf(clientID));
+				Utils.log("Received WRITE from:------>" + clientName + "[--=== "
+						+ clientReqCounter.getClientReqMap().get(Integer.valueOf(clientID)) + " ===--]");
 				String accessFile = Constants.FOLDER_PATH + Constants.SERVER_0 + "/" + Constants.FILE0_NAME;
 				File f = new File(accessFile);
 				FileWriter fw = new FileWriter(f, true);
@@ -56,10 +62,16 @@ public class ServerRequestHandler implements Runnable {
 				fw.close();
 				Utils.log("Sending SUCCESS to:------>" + clientName);
 				dos.writeUTF(Constants.SERVER_SUCCESS);
+				allClientRequestsCompleted = clientReqCounter.allReqsCompleted();
+				if (allClientRequestsCompleted) {
+					Utils.log(" *** ----------- All Requests Completed, Terminating ----------- *** ");
+				} else {
+					Utils.log(" *** ----------- Total Requests Not Completed, Continuing ----------- *** ");
+				}
+
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-
 }
