@@ -31,13 +31,17 @@ public class Utils {
 	}
 
 	public static void log(String message) {
-		String time = getTimestampForLog();
-		if (time.length() == 25)
-			System.out.println(time + " " + message);
-		else if (time.length() == 24)
-			System.out.println(time + "  " + message);
-		else
-			System.out.println(time + "   " + message);
+		// boolean display = true;
+		// if (display)
+		{
+			String time = getTimestampForLog();
+			if (time.length() == 25)
+				System.out.println(time + " " + message);
+			else if (time.length() == 24)
+				System.out.println(time + "  " + message);
+			else
+				System.out.println(time + "   " + message);
+		}
 	}
 
 	public static void storeToOutputFile(String message, int process, String task, String fileName) {

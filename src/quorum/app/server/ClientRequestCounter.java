@@ -6,23 +6,64 @@ import quorum.app.util.Constants;
 
 public class ClientRequestCounter {
 	private HashMap<Integer, Integer> clientReqMap;
+	private HashMap<Integer, Boolean> clientReqCompleted;
+	private int messagesReceivedClient;
+	private int messagesSentClient;
 
 	public ClientRequestCounter() {
 		super();
+		messagesReceivedClient = 0;
+		messagesSentClient = 0;
 		clientReqMap = new HashMap<Integer, Integer>();
+		clientReqCompleted = new HashMap<Integer, Boolean>();
 		initialiseClientReqMap();
+		initialiseClientReqComplete();
+	}
+
+	public void updateMessagesReceivedFromClient() {
+		messagesReceivedClient = messagesReceivedClient + 1;
+	}
+
+	public void updateMessagesSentToClient() {
+		messagesSentClient = messagesSentClient + 1;
+	}
+
+	public int getTotalMessages() {
+		return messagesReceivedClient + messagesSentClient;
+	}
+
+	public int getMessagesReceivedClient() {
+		return messagesReceivedClient;
+	}
+
+	public int getMessagesSentClient() {
+		return messagesSentClient;
 	}
 
 	public HashMap<Integer, Integer> getClientReqMap() {
 		return clientReqMap;
 	}
 
+	public HashMap<Integer, Boolean> getClientReqCompleted() {
+		return clientReqCompleted;
+	}
+
 	private void initialiseClientReqMap() {
-		clientReqMap.put(1, 0);
-		clientReqMap.put(2, 0);
-		clientReqMap.put(3, 0);
-		clientReqMap.put(4, 0);
-		clientReqMap.put(5, 0);
+		for (int i = 1; i <= Constants.TOTAL_CLIENTS; i++)
+			clientReqMap.put(i, 0);
+		// clientReqMap.put(2, 0);
+		// clientReqMap.put(3, 0);
+		// clientReqMap.put(4, 0);
+		// clientReqMap.put(5, 0);
+	}
+
+	private void initialiseClientReqComplete() {
+		for (int i = 1; i <= Constants.TOTAL_CLIENTS; i++)
+			clientReqCompleted.put(i, false);
+		// clientReqCompleted.put(2, false);
+		// clientReqCompleted.put(3, false);
+		// clientReqCompleted.put(4, false);
+		// clientReqCompleted.put(5, false);
 	}
 
 	public void updateClientReqMap(Integer clientID) {
@@ -30,10 +71,14 @@ public class ClientRequestCounter {
 		clientReqMap.put(clientID, currentCount + 1);
 	}
 
+	public void updateClientReqComplete(Integer clientID) {
+		clientReqCompleted.put(clientID, true);
+	}
+
 	public boolean allReqsCompleted() {
 		boolean completed = false;
-		for (Integer count : clientReqMap.values()) {
-			if (count == Constants.TOTAL_REQUESTS)
+		for (Boolean value : clientReqCompleted.values()) {
+			if (value == true)
 				completed = true;
 			else {
 				completed = false;
@@ -42,4 +87,5 @@ public class ClientRequestCounter {
 		}
 		return completed;
 	}
+
 }

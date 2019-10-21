@@ -12,12 +12,36 @@ public class QuorumMutexImpl {
 	private String state;
 	ArrayList<QuorumQueuedRequest> queuedRequest;
 	HashMap<Integer, DataOutputStream> clientDosMap;
+	private int messagesReceivedClient;
+	private int messagesSentClient;
 
 	public QuorumMutexImpl() {
 		super();
 		this.state = Constants.UNLOCKED;
+		messagesReceivedClient = 0;
+		messagesSentClient = 0;
 		this.queuedRequest = new ArrayList<QuorumQueuedRequest>();
 		this.clientDosMap = new HashMap<Integer, DataOutputStream>();
+	}
+
+	public void updateMessagesReceivedFromClient() {
+		messagesReceivedClient = messagesReceivedClient + 1;
+	}
+
+	public void updateMessagesSentToClient() {
+		messagesSentClient = messagesSentClient + 1;
+	}
+
+	public int getTotalMessages() {
+		return messagesReceivedClient + messagesSentClient;
+	}
+
+	public int getMessagesReceivedClient() {
+		return messagesReceivedClient;
+	}
+
+	public int getMessagesSentClient() {
+		return messagesSentClient;
 	}
 
 	public String getState() {

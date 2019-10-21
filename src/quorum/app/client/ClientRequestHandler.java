@@ -20,7 +20,7 @@ public class ClientRequestHandler implements Runnable {
 	DataInputStream dis;
 	DataOutputStream dos;
 	Socket socket;
-	ClientMutexImpl ci;
+	ClientMutexImpl clientMutexImpl;
 
 	/**
 	 * Constructor for creating a handler for communication between the clients Each
@@ -32,7 +32,7 @@ public class ClientRequestHandler implements Runnable {
 	public ClientRequestHandler(Socket s, ClientMutexImpl ci) {
 		super();
 		this.socket = s;
-		this.ci = ci;
+		this.clientMutexImpl = ci;
 		try {
 			dis = new DataInputStream(s.getInputStream());
 			dos = new DataOutputStream(s.getOutputStream());
@@ -56,12 +56,11 @@ public class ClientRequestHandler implements Runnable {
 						String operation = tokens[0];
 						String grantTimestamp = tokens[1];
 						if (Constants.GRANT.equalsIgnoreCase(operation)) {
-							// Utils.log("Before count:" + ci.getPendingQuorumReply());
 							Utils.log("Received GRANT from :------>"
 									+ Utils.getQuorumServerFromHost(socket.getInetAddress().getHostName()) + " at "
 									+ grantTimestamp);
-							ci.updatePendingQuorumReply();
-							// Utils.log("After count:" + ci.getPendingQuorumReply());
+							clientMutexImpl.updatePendingQuorumReply();
+							clientMutexImpl.updateMessagesReceived(Constants.QUORUM_SERVER);
 						}
 					}
 				}

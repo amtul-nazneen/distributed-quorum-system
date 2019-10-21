@@ -139,32 +139,40 @@ public class Client {
 
 				clientMutex.myCSRequestBegin(myRequestTime, quorumSize);
 
-				executeCS(socketFileServer, dosFileServer, disFileServer);
+				executeCS(dosFileServer, disFileServer, clientMutex);
 
 				Thread.sleep((long) Math.random() * 1000);
 				clientMutex.sendRelease();
-				if (csRequestCount == 20) {
+				if (csRequestCount == Constants.TOTAL_REQUESTS) {
 					requestsCompleted = true;
-					Utils.log("Requests completed. Sending Notification to Server");
-				}
-			}
+					sendCompleteNotifServer(dosFileServer, clientMutex);
+					waitForAckFileServer(disFileServer, clientMutex);
+					Utils.log("Reached TERMINATION");
+					Utils.log("Total messages: " + clientMutex.getMessageCounter().getTotalMessages());
+					Utils.log("Total messages sent: " + clientMutex.getMessageCounter().getTotalMessagesSent());
+					Utils.log("Total messages received: " + clientMutex.getMessageCounter().getTotalMessagesReceived());
+					Utils.log("Total messages received Quorum: "
+							+ clientMutex.getMessageCounter().getMessagesReceivedQuorumServer());
+					Utils.log("Total messages received File: "
+							+ clientMutex.getMessageCounter().getMessagesReceivedFileServer());
+					Utils.log("Total messages sent Quorum: "
+							+ clientMutex.getMessageCounter().getMessagesSentQuorumServer());
+					Utils.log(
+							"Total messages sent File: " + clientMutex.getMessageCounter().getMessagesSentFileServer());
 
-			boolean gotAck = false;
-			while (!gotAck) {
-				Thread.sleep((long) Math.random() * 10000);
-				Utils.log("Waiting for acknowledgement from Server");
-				// TODO
+				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-	private void executeCS(Socket socketFileServer, DataOutputStream dosFileServer, DataInputStream disFileServer)
+	private void executeCS(DataOutputStream dosFileServer, DataInputStream disFileServer, ClientMutexImpl clientMutex)
 			throws Exception {
 		Utils.log("===================== Starting  CS_Access: [[[[[[[[[ ---- " + csRequestCount
 				+ " ---- ]]]]]]]]] =====================");
-		dosFileServer.writeUTF(clientID + "," + Utils.getTimestampForLog());
+		dosFileServer.writeUTF(Constants.WRITE + "," + clientID + "," + Utils.getTimestampForLog());
+		clientMutex.updateMessagesSent(Constants.FILE_SERVER);
 		String reply = "";
 		boolean gotReply = false;
 		Utils.log("Wrote to file server, waiting for reply");
@@ -172,10 +180,32 @@ public class Client {
 			reply = disFileServer.readUTF();
 			if (reply != null) {
 				Utils.log("got reply from server:-->" + "{ " + reply.toUpperCase() + " } ");
+				clientMutex.updateMessagesReceived(Constants.FILE_SERVER);
 				gotReply = true;
 			}
 		}
 		Utils.log("===================== Completed  CS_Access: [[[[[[[[[ ---- " + csRequestCount
 				+ " ---- ]]]]]]]]] =====================");
+	}
+
+	private void sendCompleteNotifServer(DataOutputStream dosFileServer, ClientMutexImpl clientMutex) throws Exception {
+		Utils.log("Sending COMPLETE notification to FileServer");
+		dosFileServer.writeUTF(Constants.COMPLETE + "," + clientID + "," + Utils.getTimestampForLog());
+		clientMutex.updateMessagesSent(Constants.FILE_SERVER);
+	}
+
+	private void waitForAckFileServer(DataInputStream disFileServer, ClientMutexImpl clientMutex) throws Exception {
+		Utils.log("Waiting for acknowledgement from FileServer");
+		boolean gotAck = false;
+		String ack = "";
+		while (!gotAck) {
+			Thread.sleep((long) Math.random() * 5000);
+			ack = disFileServer.readUTF();
+			if (ack != null && Constants.COMPLETE_ACK.equalsIgnoreCase(ack)) {
+				Utils.log("Got ACK:-->" + "{ " + ack.toUpperCase() + " } ");
+				clientMutex.updateMessagesReceived(Constants.FILE_SERVER);
+				gotAck = true;
+			}
+		}
 	}
 }

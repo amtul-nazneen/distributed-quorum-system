@@ -11,14 +11,14 @@ public class Hello {
 		boolean completed = false;
 //TODO
 		ClientRequestCounter ci = new ClientRequestCounter();
-		ci.getClientReqMap().put(1, 20);
-		ci.getClientReqMap().put(2, 20);
-		ci.getClientReqMap().put(3, 20);
-		ci.getClientReqMap().put(4, 20);
-		ci.getClientReqMap().put(5, 0);
-		for (Integer count : ci.getClientReqMap().values()) {
-			System.out.println("count:" + count);
-			if (count == 20)
+		ci.getClientReqCompleted().put(1, false);
+		ci.getClientReqCompleted().put(2, false);
+		ci.getClientReqCompleted().put(3, false);
+		ci.getClientReqCompleted().put(4, false);
+		ci.getClientReqCompleted().put(5, false);
+		// boolean completed = false;
+		for (Boolean value : ci.getClientReqCompleted().values()) {
+			if (value == true)
 				completed = true;
 			else {
 				completed = false;

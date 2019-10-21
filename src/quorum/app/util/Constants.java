@@ -40,7 +40,8 @@ public class Constants {
 	public static final boolean ENABLE_SOCKET_CLOSE = false;
 	public static final int CLIENT_TIMEOUT = 10;
 	public static final int SERVER_TIMEOUT = 20;
-	public static final int TOTAL_REQUESTS = 20;
+	public static final int TOTAL_REQUESTS = 5;
+	public static final int TOTAL_CLIENTS = 1;
 	/*
 	 * ------ Section V: Begin of:Misc. configurations ------
 	 */
@@ -65,6 +66,11 @@ public class Constants {
 	public static final String LOCKED = "locked";
 	public static final String UNLOCKED = "unlocked";
 	public static final String GRANT = "grant";
+	public static final String WRITE = "write";
 	public static final String RELEASE = "release";
+	public static final String COMPLETE = "complete";
+	public static final String COMPLETE_ACK = "complete-ack";
+	public static final String FILE_SERVER = "file";
+	public static final String QUORUM_SERVER = "quorum";
 
 }

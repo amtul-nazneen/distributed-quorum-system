@@ -11,10 +11,9 @@ public class ClientMutexImpl {
 	private int pendingQuorumReply;
 	HashMap<Integer, DataOutputStream> docsForQuorum;
 	private int processNum;
-
-	public int getPendingQuorumReply() {
-		return pendingQuorumReply;
-	}
+	// private int messagesSent;
+	// private int messagesReceived;
+	private MessageCounter messageCounter;
 
 	public ClientMutexImpl(int processNum) {
 		super();
@@ -24,6 +23,23 @@ public class ClientMutexImpl {
 
 	private void init() {
 		this.docsForQuorum = new HashMap<Integer, DataOutputStream>();
+		// this.messagesSent = 0;
+		// this.messagesReceived = 0;
+		this.messageCounter = new MessageCounter();
+	}
+
+	/*
+	 * public int getMessagesSent() { return messagesSent; }
+	 * 
+	 * public int getMessagesReceived() { return messagesReceived; }
+	 */
+
+	public MessageCounter getMessageCounter() {
+		return messageCounter;
+	}
+
+	public int getPendingQuorumReply() {
+		return pendingQuorumReply;
 	}
 
 	public void setPendingQuorumReply(int remreply) {
@@ -34,13 +50,30 @@ public class ClientMutexImpl {
 		pendingQuorumReply--;
 	}
 
+	public void updateMessagesSent(String entity) {
+		// messagesSent = messagesSent + 1;
+		// Utils.log("Updated messages sent:" + messagesSent);
+		if (Constants.FILE_SERVER.equalsIgnoreCase(entity))
+			this.messageCounter.updateMessagesSentFileServer();
+		else if (Constants.QUORUM_SERVER.equalsIgnoreCase(entity))
+			this.messageCounter.updateMessagesSentQuorumServer();
+	}
+
+	public void updateMessagesReceived(String entity) {
+		// messagesReceived = messagesReceived + 1;
+		// Utils.log("Updated messages received:" + messagesReceived);
+		if (Constants.FILE_SERVER.equalsIgnoreCase(entity))
+			this.messageCounter.updateMessagesReceivedFileServer();
+		else if (Constants.QUORUM_SERVER.equalsIgnoreCase(entity))
+			this.messageCounter.updateMessagesReceivedQuorumServer();
+	}
+
 	public boolean myCSRequestBegin(Timestamp time, int setPendingQuorumReply) throws Exception {
 		setPendingQuorumReply(setPendingQuorumReply);
 
 		for (DataOutputStream dos : docsForQuorum.values()) {
 			dos.writeUTF(Constants.REQUEST + "," + time);
-			if (processNum == 1)
-				Thread.sleep(processNum * 3000);
+			updateMessagesSent(Constants.QUORUM_SERVER);
 		}
 		Utils.log("Sent request to all waiting for replies");
 		while (pendingQuorumReply > 0) {
@@ -60,6 +93,7 @@ public class ClientMutexImpl {
 		Timestamp releaseTime = Utils.getTimestamp();
 		for (DataOutputStream dos : docsForQuorum.values()) {
 			dos.writeUTF(Constants.RELEASE + "," + releaseTime);
+			updateMessagesSent(Constants.QUORUM_SERVER);
 		}
 	}
 
