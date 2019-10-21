@@ -51,19 +51,11 @@ public class ClientRequestCounter {
 	private void initialiseClientReqMap() {
 		for (int i = 1; i <= Constants.TOTAL_CLIENTS; i++)
 			clientReqMap.put(i, 0);
-		// clientReqMap.put(2, 0);
-		// clientReqMap.put(3, 0);
-		// clientReqMap.put(4, 0);
-		// clientReqMap.put(5, 0);
 	}
 
 	private void initialiseClientReqComplete() {
 		for (int i = 1; i <= Constants.TOTAL_CLIENTS; i++)
 			clientReqCompleted.put(i, false);
-		// clientReqCompleted.put(2, false);
-		// clientReqCompleted.put(3, false);
-		// clientReqCompleted.put(4, false);
-		// clientReqCompleted.put(5, false);
 	}
 
 	public void updateClientReqMap(Integer clientID) {

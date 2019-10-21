@@ -5,6 +5,7 @@ public class MessageCounter {
 	private int messagesSentQuorumServer;
 	private int messagesReceivedFileServer;
 	private int messagesReceivedQuorumServer;
+	private int csMessages;
 
 	public MessageCounter() {
 		super();
@@ -12,6 +13,7 @@ public class MessageCounter {
 		this.messagesReceivedQuorumServer = 0;
 		this.messagesSentFileServer = 0;
 		this.messagesSentQuorumServer = 0;
+		this.csMessages = 0;
 	}
 
 	public int getMessagesSentFileServer() {
@@ -28,6 +30,18 @@ public class MessageCounter {
 
 	public int getMessagesReceivedQuorumServer() {
 		return messagesReceivedQuorumServer;
+	}
+
+	public int getCSMessages() {
+		return csMessages;
+	}
+
+	public void setCSMessages(int value) {
+		this.csMessages = value;
+	}
+
+	public void resetCSMessages() {
+		this.csMessages = 0;
 	}
 
 	public int getTotalMessages() {

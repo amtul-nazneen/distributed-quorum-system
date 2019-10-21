@@ -9,10 +9,6 @@ public class ClientStarter {
 			return;
 		}
 		String id = args[0];
-		/*
-		 * if ("1".equals(id)) { Utils.logWithSeparator("Starting Client ID:1"); } if
-		 * ("2".equals(id)) { Utils.logWithSeparator("Starting Client ID:2"); }
-		 */
 		Client client = new Client(Integer.valueOf(id));
 		client.startClient();
 	}

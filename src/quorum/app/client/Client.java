@@ -4,6 +4,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.net.Socket;
 import java.sql.Timestamp;
+import java.util.HashMap;
 
 import quorum.app.util.Constants;
 import quorum.app.util.Utils;
@@ -131,18 +132,30 @@ public class Client {
 				Thread.sleep((long) (Math.random() * 1000));
 				Utils.log("CS Access Requesting------>" + csRequestCount);
 				// TODO get the quorum
-				// TODO set remreply value in quorum
 				int quorumSize = 2;
+				HashMap<Integer, DataOutputStream> quorums = new HashMap<Integer, DataOutputStream>();
+				for (int i = 1; i <= quorumSize; i++) {
+					if (i == 1)
+						quorums.put(i, dosQuorum1);
+					else if (i == 2)
+						quorums.put(i, dosQuorum2);
+					/*
+					 * else if (i == 3) quorums.put(i, dosQuorum3); else if (i == 4) quorums.put(i,
+					 * dosQuorum4); else if (i == 5) quorums.put(i, dosQuorum5); else if (i == 6)
+					 * quorums.put(i, dosQuorum6); else if (i == 7) quorums.put(i, dosQuorum7);
+					 */
+				}
 				Timestamp myRequestTime = Utils.getTimestamp();
-				clientMutex.mapQuorumDOS(dosQuorum1, dosQuorum2);// , dosQuorum3, dosQuorum4, dosQuorum5, dosQuorum6,
-				// dosQuorum7);
-
-				clientMutex.myCSRequestBegin(myRequestTime, quorumSize);
-
+				clientMutex.mapQuorumDOS(quorums);
+				clientMutex.getMessageCounter().resetCSMessages();
+				clientMutex.myCSRequestBegin(myRequestTime);
+				Timestamp myCSExecTime = Utils.getTimestamp();
 				executeCS(dosFileServer, disFileServer, clientMutex);
 
 				Thread.sleep((long) Math.random() * 1000);
 				clientMutex.sendRelease();
+				Utils.log("Total CS Messages: " + clientMutex.getMessageCounter().getCSMessages());
+				Utils.log("Total Latency: " + Utils.getTimeDifference(myRequestTime, myCSExecTime) + " sec.");
 				if (csRequestCount == Constants.TOTAL_REQUESTS) {
 					requestsCompleted = true;
 					sendCompleteNotifServer(dosFileServer, clientMutex);
@@ -173,6 +186,7 @@ public class Client {
 				+ " ---- ]]]]]]]]] =====================");
 		dosFileServer.writeUTF(Constants.WRITE + "," + clientID + "," + Utils.getTimestampForLog());
 		clientMutex.updateMessagesSent(Constants.FILE_SERVER);
+		clientMutex.updateCSMessages();
 		String reply = "";
 		boolean gotReply = false;
 		Utils.log("Wrote to file server, waiting for reply");
@@ -181,6 +195,7 @@ public class Client {
 			if (reply != null) {
 				Utils.log("got reply from server:-->" + "{ " + reply.toUpperCase() + " } ");
 				clientMutex.updateMessagesReceived(Constants.FILE_SERVER);
+				clientMutex.updateCSMessages();
 				gotReply = true;
 			}
 		}

@@ -40,8 +40,8 @@ public class Constants {
 	public static final boolean ENABLE_SOCKET_CLOSE = false;
 	public static final int CLIENT_TIMEOUT = 10;
 	public static final int SERVER_TIMEOUT = 20;
-	public static final int TOTAL_REQUESTS = 5;
-	public static final int TOTAL_CLIENTS = 1;
+	public static final int TOTAL_REQUESTS = 3;
+	public static final int TOTAL_CLIENTS = 2;
 	/*
 	 * ------ Section V: Begin of:Misc. configurations ------
 	 */

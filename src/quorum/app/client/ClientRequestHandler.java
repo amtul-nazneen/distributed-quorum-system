@@ -61,6 +61,7 @@ public class ClientRequestHandler implements Runnable {
 									+ grantTimestamp);
 							clientMutexImpl.updatePendingQuorumReply();
 							clientMutexImpl.updateMessagesReceived(Constants.QUORUM_SERVER);
+							clientMutexImpl.updateCSMessages();
 						}
 					}
 				}
