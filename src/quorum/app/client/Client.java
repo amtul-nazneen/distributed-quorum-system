@@ -132,6 +132,7 @@ public class Client {
 				Thread.sleep((long) (Math.random() * 1000));
 				Utils.log("CS Access Requesting------>" + csRequestCount);
 				// TODO get the quorum
+
 				int quorumSize = 2;
 				HashMap<Integer, DataOutputStream> quorums = new HashMap<Integer, DataOutputStream>();
 				for (int i = 1; i <= quorumSize; i++) {

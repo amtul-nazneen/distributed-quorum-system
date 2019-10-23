@@ -10,4 +10,29 @@ public class QNode {
 		right = null;
 		left = null;
 	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public QNode getLeft() {
+		return left;
+	}
+
+	public void setLeft(QNode left) {
+		this.left = left;
+	}
+
+	public QNode getRight() {
+		return right;
+	}
+
+	public void setRight(QNode right) {
+		this.right = right;
+	}
+
 }
