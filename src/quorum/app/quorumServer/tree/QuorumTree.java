@@ -1,17 +1,21 @@
 package quorum.app.quorumServer.tree;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
 public class QuorumTree {
 	QNode root;
-	List<Integer> quorum = new ArrayList<Integer>();
-	HashMap<String, Integer> map = new HashMap<String, Integer>();
-	Random rand = new Random();
+	List<Integer> quorum;
+	Random rand;
 
-	public void createTree() {
+	public QuorumTree() {
+		createTree();
+		quorum = new ArrayList<Integer>();
+		rand = new Random();
+	}
+
+	private void createTree() {
 		QNode root = new QNode(1);
 		QNode two = new QNode(2);
 		QNode three = new QNode(3);
@@ -26,17 +30,6 @@ public class QuorumTree {
 		three.left = six;
 		three.right = seven;
 		this.root = root;
-	}
-
-	public static void main(String[] args) {
-		QuorumTree qt = new QuorumTree();
-		qt.createTree();
-		for (int i = 0; i < 500; i++) {
-			qt.clearQuorum();
-			qt.displayRec(qt.root);
-			qt.printQuorum();
-		}
-		qt.printMap();
 	}
 
 	public void displayRec(QNode root) {
@@ -61,20 +54,12 @@ public class QuorumTree {
 		}
 	}
 
-	public void printQuorum() {
-		String s = "";
-		for (Integer i : quorum)
-			s = s + i + ",";
-		map.put(s.substring(0, s.length() - 1), 1);
+	public QNode getRoot() {
+		return root;
 	}
 
-	public void clearQuorum() {
-		quorum.clear();
+	public List<Integer> getQuorum() {
+		return quorum;
 	}
 
-	public void printMap() {
-		System.out.println("Quorum Size Total:--" + map.size());
-		for (String key : map.keySet())
-			System.out.println(key);
-	}
 }

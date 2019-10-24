@@ -1,12 +1,14 @@
 package quorum.app.util;
 
 import java.io.BufferedWriter;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * @author amtul.nazneen
@@ -131,5 +133,21 @@ public class Utils {
 		long milliseconds = end.getTime() - start.getTime();
 		int seconds = (int) milliseconds / 1000;
 		return seconds;
+	}
+
+	public static void printSelectedQuorum(List<Integer> quorums, int clientID) {
+		String quorum = "";
+		for (Integer quorumID : quorums)
+			quorum = quorum + quorumID + ",";
+		Utils.log("Selected Quorum by Client:" + clientID + " --->" + quorum.substring(0, quorum.length() - 1));
+
+	}
+
+	public static void printSelectedQuorum2(HashMap<Integer, DataOutputStream> quorums) {
+		String quorum = "";
+		for (Integer quorumID : quorums.keySet())
+			quorum = quorum + quorumID + ",";
+		Utils.log("Selected Quorum in MutexClass:" + " --->" + quorum.substring(0, quorum.length() - 1));
+
 	}
 }

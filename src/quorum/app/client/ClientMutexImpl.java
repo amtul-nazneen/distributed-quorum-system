@@ -91,6 +91,7 @@ public class ClientMutexImpl {
 
 	public void mapQuorumDOS(HashMap<Integer, DataOutputStream> quorums) {
 		docsForQuorum = quorums;
+		// Utils.printSelectedQuorum2(quorums);
 	}
 
 }
