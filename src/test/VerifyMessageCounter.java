@@ -6,7 +6,7 @@ import quorum.app.util.Utils;
 public class VerifyMessageCounter {
 
 	public static void main(String[] args) {
-		printTotalMessagesClient(2);
+		printTotalMessagesClient(4);
 		printTotalMessagesFileServer();
 	}
 

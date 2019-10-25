@@ -58,7 +58,7 @@ public class ClientRequestHandler implements Runnable {
 						if (Constants.GRANT.equalsIgnoreCase(operation)) {
 							Utils.log("Received GRANT from :------>"
 									+ Utils.getQuorumServerFromHost(socket.getInetAddress().getHostName()) + " at "
-									+ grantTimestamp);
+									+ "[" + grantTimestamp + "]");
 							clientMutexImpl.updatePendingQuorumReply();
 							clientMutexImpl.updateMessagesReceived(Constants.QUORUM_SERVER);
 							clientMutexImpl.updateCSMessages();

@@ -1,8 +1,10 @@
 package quorum.app.quorumServer;
 
+import java.io.BufferedWriter;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
-import java.io.IOException;
+import java.io.File;
+import java.io.FileWriter;
 import java.net.Socket;
 import java.sql.Timestamp;
 
@@ -15,13 +17,16 @@ class QuorumRequestHandler extends Thread {
 	final Socket s;
 	String clientHost;
 	QuorumMutexImpl quorumMutex;
+	int quorumID;
 
-	public QuorumRequestHandler(Socket s, DataInputStream dis, DataOutputStream dos, QuorumMutexImpl quorumMutex) {
+	public QuorumRequestHandler(Socket s, DataInputStream dis, DataOutputStream dos, QuorumMutexImpl quorumMutex,
+			int quorumID) {
 		this.s = s;
 		this.dis = dis;
 		this.dos = dos;
 		this.quorumMutex = quorumMutex;
 		clientHost = s.getInetAddress().getHostName();
+		this.quorumID = quorumID;
 	}
 
 	@Override
@@ -34,8 +39,8 @@ class QuorumRequestHandler extends Thread {
 				String operation = tokens[0];
 				String requestTimestamp = tokens[1];
 				if (Constants.REQUEST.equalsIgnoreCase(operation)) {
-					Utils.log("Received REQUEST from :--------->" + Utils.getClientFromHost(clientHost) + " at "
-							+ requestTimestamp);
+					Utils.log("Received REQUEST from :--------->" + Utils.getClientFromHost(clientHost) + " at " + "["
+							+ requestTimestamp + "]");
 					quorumMutex.updateMessagesReceivedFromClient();
 
 					if (quorumMutex.getState().equalsIgnoreCase(Constants.UNLOCKED)) {
@@ -46,17 +51,17 @@ class QuorumRequestHandler extends Thread {
 						/* ---- ------- Sending a grant------ ------ */
 						dos.writeUTF(Constants.GRANT + "," + grantTimestamp);
 						quorumMutex.updateMessagesSentToClient();
-						Utils.log("Sent GRANT to :--------->" + Utils.getClientFromHost(clientHost) + " at "
-								+ grantTimestamp);
-						Utils.log("My State:--------->" + quorumMutex.getState().toUpperCase());
+						Utils.log("Sent GRANT to :--------->" + Utils.getClientFromHost(clientHost) + " at " + "["
+								+ grantTimestamp + "]");
+						Utils.log("My State: >>" + quorumMutex.getState().toUpperCase());
 					} else {
-						Utils.log("State is LOCKED,Adding to queue");
+						Utils.log("State is LOCKED. Adding to queue");
 						quorumMutex.getQueuedRequest().add(new QuorumQueuedRequest(
 								Utils.getClientIDFromHost(clientHost), Timestamp.valueOf(requestTimestamp)));
 					}
 				} else if (Constants.RELEASE.equalsIgnoreCase(operation)) {
-					Utils.log("Received RELEASE from :--------->" + Utils.getClientFromHost(clientHost) + " at "
-							+ requestTimestamp);
+					Utils.log("Received RELEASE from :--------->" + Utils.getClientFromHost(clientHost) + " at " + "["
+							+ requestTimestamp + "]");
 					quorumMutex.updateMessagesReceivedFromClient();
 					if (Constants.LOCKED.equalsIgnoreCase(quorumMutex.getState())) {
 						if (quorumMutex.getQueuedRequest() != null && !quorumMutex.getQueuedRequest().isEmpty()) {
@@ -69,24 +74,42 @@ class QuorumRequestHandler extends Thread {
 							quorumMutex.updateMessagesSentToClient();
 							quorumMutex.deleteFromQuorumQueuedRequest();
 							Utils.log("State is LOCKED. Picked a request from Queue. Sent GRANT to :--------->"
-									+ Utils.getClientFromID(chosenRequest.getProcessNum()) + " at " + grantTimestamp);
-							Utils.log("My State:--------->" + quorumMutex.getState().toUpperCase());
+									+ Utils.getClientFromID(chosenRequest.getProcessNum()) + " at " + "["
+									+ grantTimestamp + "]");
+							Utils.log("My State: >>" + quorumMutex.getState().toUpperCase());
 						} else {
-							Utils.log("Request queue is empty. Changing state to UNLOCKED");
+							Utils.log("Request Queue Empty. Changing state to UNLOCKED");
 							/* ---- ------- Setting state to unlocked------ ------ */
 							quorumMutex.setState(Constants.UNLOCKED);
-							Utils.log("My State:--------->" + quorumMutex.getState().toUpperCase());
+							Utils.log("My State: >>" + quorumMutex.getState().toUpperCase());
 						}
 					}
 				}
-				Utils.log(" *** ----------- All Requests Completed, Terminating ----------- *** ");
-				Utils.log("Total messages: " + quorumMutex.getTotalMessages());
-				Utils.log("Total messages sent client: " + quorumMutex.getMessagesSentClient());
-				Utils.log("Total messages received client: " + quorumMutex.getMessagesReceivedClient());
-			} catch (IOException e) {
+				Utils.log("================= ================= =================");
+				Utils.log("Total Messages: " + quorumMutex.getTotalMessages());
+				Utils.log("Total Messages Sent to Clients: " + quorumMutex.getMessagesSentClient());
+				Utils.log("Total Messages Received from Clients: " + quorumMutex.getMessagesReceivedClient());
+				logDataCollectionToFile();
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
 
+	}
+
+	private void logDataCollectionToFile() throws Exception {
+		String accessFile = Constants.HOME + Constants.QUORUM_LOG_FOLDER + Constants.QUORUM_LOG_FILE + quorumID
+				+ Constants.FILE_EXT;
+		File f = new File(accessFile);
+		FileWriter fw = new FileWriter(f, false);
+		BufferedWriter filewriter = new BufferedWriter(fw);
+		filewriter.write("================= DATA COLLECTION FOR QUORUM SERVER:" + quorumID + " =================="
+				+ Constants.EOL);
+		filewriter.write("Total Messages: " + quorumMutex.getTotalMessages() + Constants.EOL);
+		filewriter.write("Total Messages Sent to Clients: " + quorumMutex.getMessagesSentClient() + Constants.EOL);
+		filewriter.write(
+				"Total Messages Received from Clients: " + quorumMutex.getMessagesReceivedClient() + Constants.EOL);
+		filewriter.close();
+		fw.close();
 	}
 }

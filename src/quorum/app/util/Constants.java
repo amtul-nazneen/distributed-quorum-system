@@ -40,8 +40,13 @@ public class Constants {
 	public static final boolean ENABLE_SOCKET_CLOSE = false;
 	public static final int CLIENT_TIMEOUT = 10;
 	public static final int SERVER_TIMEOUT = 20;
-	public static final int TOTAL_REQUESTS = 3;
-	public static final int TOTAL_CLIENTS = 2;
+	public static final int TOTAL_REQUESTS = 20;
+	public static final int TOTAL_CLIENTS = 1;
+	public static final int CLIENT1_WAIT_TIME = 2000;
+	public static final int CLIENT2_WAIT_TIME = 2000;
+	public static final int CLIENT3_WAIT_TIME = 3700;
+	public static final int CLIENT4_WAIT_TIME = 3000;
+	public static final int CLIENT5_WAIT_TIME = 2500;
 	/*
 	 * ------ Section V: Begin of:Misc. configurations ------
 	 */
@@ -51,7 +56,14 @@ public class Constants {
 
 	public static final String SERVER_0 = "s0";
 
-	public static final String FOLDER_PATH = "/home/eng/a/axn180041/quorum/";
+	public static final String HOME = "/home/eng/a/axn180041/quorum/";
+	public static final String CLIENT_LOG_FOLDER = "datalog/client/";
+	public static final String QUORUM_LOG_FOLDER = "datalog/quorum/";
+	public static final String SERVER_LOG_FOLDER = "datalog/server/";
+	public static final String CLIENT_LOG_FILE = "Client";
+	public static final String QUORUM_LOG_FILE = "Quorum";
+	public static final String SERVER_LOG_FILE = "FileServer";
+
 	public static final String FILE_EXT = ".txt";
 	public static final String EOL = "\n";
 

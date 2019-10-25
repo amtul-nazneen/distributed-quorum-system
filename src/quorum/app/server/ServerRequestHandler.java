@@ -54,10 +54,9 @@ public class ServerRequestHandler implements Runnable {
 				if (Constants.WRITE.equalsIgnoreCase(operation)) {
 					clientReqCounter.updateClientReqMap(clientIDInt);
 					clientReqCounter.updateMessagesReceivedFromClient();
-
-					Utils.log("Received WRITE from:------>" + Utils.getClientFromID(clientIDInt) + "[--=== "
-							+ clientReqCounter.getClientReqMap().get(clientIDInt) + " ===--]");
-					String accessFile = Constants.FOLDER_PATH + Constants.SERVER_0 + "/" + Constants.FILE0_NAME;
+					Utils.log("Received WRITE     from:------>" + Utils.getClientFromID(clientIDInt) + "[--===== "
+							+ clientReqCounter.getClientReqMap().get(clientIDInt) + " =====--]");
+					String accessFile = Constants.HOME + Constants.SERVER_0 + "/" + Constants.FILE0_NAME;
 					File f = new File(accessFile);
 					FileWriter fw = new FileWriter(f, true);
 					BufferedWriter filewriter = new BufferedWriter(fw);
@@ -66,31 +65,46 @@ public class ServerRequestHandler implements Runnable {
 					filewriter.close();
 					fw.close();
 
-					Utils.log("Sending SUCCESS to:------>" + Utils.getClientFromID(clientIDInt));
+					Utils.log("Sending  SUCCESS   to:-------->" + Utils.getClientFromID(clientIDInt));
 					dos.writeUTF(Constants.SERVER_SUCCESS);
 					clientReqCounter.updateMessagesSentToClient();
 				} else if (Constants.COMPLETE.equalsIgnoreCase(operation)) {
 					clientReqCounter.updateClientReqComplete(clientIDInt);
 					clientReqCounter.updateMessagesReceivedFromClient();
-					Utils.log("Received COMPLETE from:------>" + Utils.getClientFromID(clientIDInt));
+					Utils.log("Received COMPLETE  from:------>" + Utils.getClientFromID(clientIDInt));
 					Utils.log("Sending COMPLETE-ACK to:------>" + Utils.getClientFromID(clientIDInt));
 					dos.writeUTF(Constants.COMPLETE_ACK);
 					clientReqCounter.updateMessagesSentToClient();
 				}
-
 				allClientRequestsCompleted = clientReqCounter.allReqsCompleted();
 				if (allClientRequestsCompleted) {
 					Utils.log(" *** ----------- All Requests Completed, Terminating ----------- *** ");
-					Utils.log("Total messages: " + clientReqCounter.getTotalMessages());
-					Utils.log("Total messages sent client: " + clientReqCounter.getMessagesSentClient());
-					Utils.log("Total messages received client: " + clientReqCounter.getMessagesReceivedClient());
-				} else {
-					Utils.log(" *** ----------- Total Requests Not Completed, Continuing ----------- *** ");
+					Utils.log("================= DATA COLLECTION FOR FILE SERVER ==================");
+					Utils.log("Total Messages: " + clientReqCounter.getTotalMessages());
+					Utils.log("Total Messages Sent to all Clients: " + clientReqCounter.getMessagesSentClient());
+					Utils.log("Total Messages Received from all Clients: "
+							+ clientReqCounter.getMessagesReceivedClient());
+					logDataCollectionToFile();
 				}
-
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	private void logDataCollectionToFile() throws Exception {
+		String accessFile = Constants.HOME + Constants.SERVER_LOG_FOLDER + Constants.SERVER_LOG_FILE
+				+ Constants.FILE_EXT;
+		File f = new File(accessFile);
+		FileWriter fw = new FileWriter(f, true);
+		BufferedWriter filewriter = new BufferedWriter(fw);
+		filewriter.write("================= DATA COLLECTION FOR FILE SERVER ==================" + Constants.EOL);
+		filewriter.write("Total Messages: " + clientReqCounter.getTotalMessages() + Constants.EOL);
+		filewriter.write(
+				"Total Messages Sent to all Clients: " + clientReqCounter.getMessagesSentClient() + Constants.EOL);
+		filewriter.write("Total Messages Received from all Clients: " + clientReqCounter.getMessagesReceivedClient()
+				+ Constants.EOL);
+		filewriter.close();
+		fw.close();
 	}
 }

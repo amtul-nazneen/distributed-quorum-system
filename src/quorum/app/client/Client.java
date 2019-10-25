@@ -1,7 +1,10 @@
 package quorum.app.client;
 
+import java.io.BufferedWriter;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileWriter;
 import java.net.Socket;
 import java.sql.Timestamp;
 import java.util.HashMap;
@@ -43,7 +46,6 @@ public class Client {
 			ClientRequestHandler reqHandlerQuorum1 = new ClientRequestHandler(socketQuorum1, clientMutex);
 			Thread threadQuroum1 = new Thread(reqHandlerQuorum1);
 			threadQuroum1.start();
-			Utils.log("Connected to: " + Utils.getQuorumServerFromHost(Constants.QUORUM1_HOST));
 			/*
 			 * ------------------------ CONNECTION TO QUORUM SERVER 2
 			 * ---------------------------------------------------
@@ -53,7 +55,6 @@ public class Client {
 			ClientRequestHandler reqHandlerQuorum2 = new ClientRequestHandler(socketQuorum2, clientMutex);
 			Thread threadQuroum2 = new Thread(reqHandlerQuorum2);
 			threadQuroum2.start();
-			Utils.log("Connected to: " + Utils.getQuorumServerFromHost(Constants.QUORUM2_HOST));
 			/*
 			 * ------------------------ CONNECTION TO QUORUM SERVER 3
 			 * ---------------------------------------------------
@@ -64,7 +65,6 @@ public class Client {
 			ClientRequestHandler reqHandlerQuorum3 = new ClientRequestHandler(socketQuorum3, clientMutex);
 			Thread threadQuroum3 = new Thread(reqHandlerQuorum3);
 			threadQuroum3.start();
-			Utils.log("Connected to: " + Utils.getQuorumServerFromHost(Constants.QUORUM3_HOST));
 
 			/*
 			 * ------------------------ CONNECTION TO QUORUM SERVER 4
@@ -76,7 +76,6 @@ public class Client {
 			ClientRequestHandler reqHandlerQuorum4 = new ClientRequestHandler(socketQuorum4, clientMutex);
 			Thread threadQuroum4 = new Thread(reqHandlerQuorum4);
 			threadQuroum4.start();
-			Utils.log("Connected to: " + Utils.getQuorumServerFromHost(Constants.QUORUM4_HOST));
 
 			/*
 			 * ------------------------ CONNECTION TO QUORUM SERVER 5
@@ -88,7 +87,6 @@ public class Client {
 			ClientRequestHandler reqHandlerQuorum5 = new ClientRequestHandler(socketQuorum5, clientMutex);
 			Thread threadQuroum5 = new Thread(reqHandlerQuorum5);
 			threadQuroum5.start();
-			Utils.log("Connected to: " + Utils.getQuorumServerFromHost(Constants.QUORUM5_HOST));
 
 			/*
 			 * ------------------------ CONNECTION TO QUORUM SERVER 6
@@ -100,7 +98,6 @@ public class Client {
 			ClientRequestHandler reqHandlerQuorum6 = new ClientRequestHandler(socketQuorum6, clientMutex);
 			Thread threadQuroum6 = new Thread(reqHandlerQuorum6);
 			threadQuroum6.start();
-			Utils.log("Connected to: " + Utils.getQuorumServerFromHost(Constants.QUORUM6_HOST));
 
 			/*
 			 * ------------------------ CONNECTION TO QUORUM SERVER 7
@@ -112,16 +109,15 @@ public class Client {
 			ClientRequestHandler reqHandlerQuorum7 = new ClientRequestHandler(socketQuorum7, clientMutex);
 			Thread threadQuroum7 = new Thread(reqHandlerQuorum7);
 			threadQuroum7.start();
-			Utils.log("Connected to: " + Utils.getQuorumServerFromHost(Constants.QUORUM7_HOST));
 
 			/*
 			 * ------------------------ CONNECTION TO FILE SERVER
 			 * ---------------------------------------------------
 			 */
+			@SuppressWarnings("resource")
 			Socket socketFileServer = new Socket(Constants.FILESERVER_HOST, Constants.SERVER_PORT);
 			DataOutputStream dosFileServer = new DataOutputStream(socketFileServer.getOutputStream());
 			DataInputStream disFileServer = new DataInputStream(socketFileServer.getInputStream());
-			Utils.log("Connected to: " + Utils.getFileServerFromHost());
 
 			HashMap<Integer, DataOutputStream> allQuorumServers = new HashMap<Integer, DataOutputStream>();
 			allQuorumServers.put(1, dosQuorum1);
@@ -135,11 +131,14 @@ public class Client {
 			boolean requestsCompleted = false;
 			while (!requestsCompleted) {
 				csRequestCount++;
-				Thread.sleep((long) (Math.random() * 1000));
-				Utils.log("CS Access Requesting------>" + csRequestCount);
+				Thread.sleep((long) (Math.random() * Utils.getWaitTime(clientID)));
+				Utils.log(
+						"~~|~~|~~|~~|~~|~~|~~ CS Access Requesting: ------------------------------------>->->->->->->->->->"
+								+ csRequestCount);
 
 				List<Integer> quorumList = RandomQuorumGenerator.getQuorum(clientID);
-				Utils.printSelectedQuorum(quorumList, clientID);
+				String selectedQuorums = Utils.getSelectedQuorumID(quorumList);
+				Utils.log("Sending requests to randomly chosen quorum:----> { " + selectedQuorums + " }");
 				HashMap<Integer, DataOutputStream> quorums = new HashMap<Integer, DataOutputStream>();
 				for (Integer quorumId : quorumList) {
 					quorums.put(quorumId, allQuorumServers.get(quorumId));
@@ -154,24 +153,30 @@ public class Client {
 
 				Thread.sleep((long) Math.random() * 1000);
 				clientMutex.sendRelease();
-				Utils.log("Total CS Messages: " + clientMutex.getMessageCounter().getCSMessages());
-				Utils.log("Total Latency: " + Utils.getTimeDifference(myRequestTime, myCSExecTime) + " sec.");
+				Utils.log("@_@_@_@_@_@_@_@ --- Critical Section Data Collection for Client:" + clientID);
+				Utils.log(". . . . . . . . . . Total CS Messages Exchanged: "
+						+ clientMutex.getMessageCounter().getCSMessages());
+				Utils.log(". . . . . . . . . . Total Latency: " + Utils.getTimeDifference(myRequestTime, myCSExecTime)
+						+ " sec.");
 				if (csRequestCount == Constants.TOTAL_REQUESTS) {
 					requestsCompleted = true;
 					sendCompleteNotifServer(dosFileServer, clientMutex);
 					waitForAckFileServer(disFileServer, clientMutex);
 					Utils.log("Reached TERMINATION");
-					Utils.log("Total messages: " + clientMutex.getMessageCounter().getTotalMessages());
-					Utils.log("Total messages sent: " + clientMutex.getMessageCounter().getTotalMessagesSent());
-					Utils.log("Total messages received: " + clientMutex.getMessageCounter().getTotalMessagesReceived());
-					Utils.log("Total messages received Quorum: "
-							+ clientMutex.getMessageCounter().getMessagesReceivedQuorumServer());
-					Utils.log("Total messages received File: "
-							+ clientMutex.getMessageCounter().getMessagesReceivedFileServer());
-					Utils.log("Total messages sent Quorum: "
-							+ clientMutex.getMessageCounter().getMessagesSentQuorumServer());
 					Utils.log(
-							"Total messages sent File: " + clientMutex.getMessageCounter().getMessagesSentFileServer());
+							"===================== DATA COLLECTION FOR CLIENT:" + clientID + " ===================== ");
+					Utils.log("Total Messages: " + clientMutex.getMessageCounter().getTotalMessages());
+					Utils.log("Total Messages Sent: " + +clientMutex.getMessageCounter().getTotalMessagesSent());
+					Utils.log("Total Messages Received: " + clientMutex.getMessageCounter().getTotalMessagesReceived());
+					Utils.log("Total Messages Received from Quorum Servers: "
+							+ clientMutex.getMessageCounter().getMessagesReceivedQuorumServer());
+					Utils.log("Total Messages Received from File Server: "
+							+ clientMutex.getMessageCounter().getMessagesReceivedFileServer());
+					Utils.log("Total Messages Sent to Quorum Servers: "
+							+ clientMutex.getMessageCounter().getMessagesSentQuorumServer());
+					Utils.log("Total Messages Sent to File Server: "
+							+ clientMutex.getMessageCounter().getMessagesSentFileServer());
+					logDataCollectionToFile(clientMutex);
 
 				}
 			}
@@ -182,25 +187,25 @@ public class Client {
 
 	private void executeCS(DataOutputStream dosFileServer, DataInputStream disFileServer, ClientMutexImpl clientMutex)
 			throws Exception {
-		Utils.log("===================== Starting  CS_Access: [[[[[[[[[ ---- " + csRequestCount
-				+ " ---- ]]]]]]]]] =====================");
+		Utils.log("===================== Starting   CS_Access: [[[[[[[[[ ---- " + csRequestCount
+				+ " ---- ]]]]]]]]] ===================");
 		dosFileServer.writeUTF(Constants.WRITE + "," + clientID + "," + Utils.getTimestampForLog());
 		clientMutex.updateMessagesSent(Constants.FILE_SERVER);
 		clientMutex.updateCSMessages();
 		String reply = "";
 		boolean gotReply = false;
-		Utils.log("Wrote to file server, waiting for reply");
+		Utils.log("Sent Write Request to FileServer");
 		while (!gotReply) {
 			reply = disFileServer.readUTF();
 			if (reply != null) {
-				Utils.log("got reply from server:-->" + "{ " + reply.toUpperCase() + " } ");
+				Utils.log("Received Reply from FileServer:-->" + "{ " + reply.toUpperCase() + " } ");
 				clientMutex.updateMessagesReceived(Constants.FILE_SERVER);
 				clientMutex.updateCSMessages();
 				gotReply = true;
 			}
 		}
 		Utils.log("===================== Completed  CS_Access: [[[[[[[[[ ---- " + csRequestCount
-				+ " ---- ]]]]]]]]] =====================");
+				+ " ---- ]]]]]]]]] ===================");
 	}
 
 	private void sendCompleteNotifServer(DataOutputStream dosFileServer, ClientMutexImpl clientMutex) throws Exception {
@@ -210,17 +215,41 @@ public class Client {
 	}
 
 	private void waitForAckFileServer(DataInputStream disFileServer, ClientMutexImpl clientMutex) throws Exception {
-		Utils.log("Waiting for acknowledgement from FileServer");
 		boolean gotAck = false;
 		String ack = "";
 		while (!gotAck) {
 			Thread.sleep((long) Math.random() * 5000);
 			ack = disFileServer.readUTF();
 			if (ack != null && Constants.COMPLETE_ACK.equalsIgnoreCase(ack)) {
-				Utils.log("Got ACK:-->" + "{ " + ack.toUpperCase() + " } ");
+				Utils.log("Got Acknowledgement from FileServer:-->" + "{ " + ack.toUpperCase() + " } ");
 				clientMutex.updateMessagesReceived(Constants.FILE_SERVER);
 				gotAck = true;
 			}
 		}
+	}
+
+	private void logDataCollectionToFile(ClientMutexImpl clientMutex) throws Exception {
+		String accessFile = Constants.HOME + Constants.CLIENT_LOG_FOLDER + Constants.CLIENT_LOG_FILE + clientID
+				+ Constants.FILE_EXT;
+		File f = new File(accessFile);
+		FileWriter fw = new FileWriter(f, true);
+		BufferedWriter filewriter = new BufferedWriter(fw);
+		filewriter.write("===================== DATA COLLECTION FOR CLIENT:" + clientID + " ===================== "
+				+ Constants.EOL);
+		filewriter.write("Total Messages: " + clientMutex.getMessageCounter().getTotalMessages() + Constants.EOL);
+		filewriter.write(
+				"Total Messages Sent: " + +clientMutex.getMessageCounter().getTotalMessagesSent() + Constants.EOL);
+		filewriter.write("Total Messages Received: " + clientMutex.getMessageCounter().getTotalMessagesReceived()
+				+ Constants.EOL);
+		filewriter.write("Total Messages Received from Quorum Servers: "
+				+ clientMutex.getMessageCounter().getMessagesReceivedQuorumServer() + Constants.EOL);
+		filewriter.write("Total Messages Received from File Server: "
+				+ clientMutex.getMessageCounter().getMessagesReceivedFileServer() + Constants.EOL);
+		filewriter.write("Total Messages Sent to Quorum Servers: "
+				+ clientMutex.getMessageCounter().getMessagesSentQuorumServer() + Constants.EOL);
+		filewriter.write("Total Messages Sent to File Server: "
+				+ clientMutex.getMessageCounter().getMessagesSentFileServer() + Constants.EOL);
+		filewriter.close();
+		fw.close();
 	}
 }

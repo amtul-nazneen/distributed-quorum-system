@@ -43,7 +43,7 @@ public class Utils {
 	}
 
 	public static void storeToOutputFile(String message, int process, String task, String fileName) {
-		String file = Constants.FOLDER_PATH + Constants.OUTPUT_FILE;
+		String file = Constants.HOME + Constants.OUTPUT_FILE;
 		try {
 			File f = new File(file);
 			FileWriter fw = new FileWriter(f, true);
@@ -135,11 +135,11 @@ public class Utils {
 		return seconds;
 	}
 
-	public static void printSelectedQuorum(List<Integer> quorums, int clientID) {
+	public static String getSelectedQuorumID(List<Integer> quorums) {
 		String quorum = "";
 		for (Integer quorumID : quorums)
 			quorum = quorum + quorumID + ",";
-		Utils.log("Selected Quorum by Client:" + clientID + " --->" + quorum.substring(0, quorum.length() - 1));
+		return quorum.substring(0, quorum.length() - 1);
 
 	}
 
@@ -149,5 +149,18 @@ public class Utils {
 			quorum = quorum + quorumID + ",";
 		Utils.log("Selected Quorum in MutexClass:" + " --->" + quorum.substring(0, quorum.length() - 1));
 
+	}
+
+	public static int getWaitTime(int clientId) {
+		if (clientId == 1)
+			return Constants.CLIENT1_WAIT_TIME;
+		else if (clientId == 2)
+			return Constants.CLIENT2_WAIT_TIME;
+		else if (clientId == 3)
+			return Constants.CLIENT3_WAIT_TIME;
+		else if (clientId == 4)
+			return Constants.CLIENT4_WAIT_TIME;
+		else
+			return Constants.CLIENT5_WAIT_TIME;
 	}
 }

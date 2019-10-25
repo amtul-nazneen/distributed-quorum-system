@@ -18,6 +18,7 @@ public class QuorumServer {
 		String id = args[0];
 		Utils.logWithSeparator("Starting Quorum Server:" + id);
 
+		@SuppressWarnings("resource")
 		ServerSocket quorumSocket = new ServerSocket(Constants.SERVER_PORT);
 		QuorumMutexImpl quorumMutex = new QuorumMutexImpl();
 		while (true) {
@@ -25,11 +26,11 @@ public class QuorumServer {
 			try {
 				socket = quorumSocket.accept();
 				String clientHost = socket.getInetAddress().getHostName();
-				Utils.log("New Connection ----->" + Utils.getClientFromHost(clientHost));
 				DataInputStream dis = new DataInputStream(socket.getInputStream());
 				DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
 				quorumMutex.updateClientDosMap(dos, Utils.getClientIDFromHost(clientHost));
-				Thread quorumClientThread = new QuorumRequestHandler(socket, dis, dos, quorumMutex);
+				Thread quorumClientThread = new QuorumRequestHandler(socket, dis, dos, quorumMutex,
+						Integer.valueOf(id));
 				quorumClientThread.start();
 
 			} catch (Exception e) {

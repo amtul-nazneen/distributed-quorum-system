@@ -10,13 +10,11 @@ import quorum.app.util.Utils;
 public class ClientMutexImpl {
 	private int pendingQuorumReply;
 	HashMap<Integer, DataOutputStream> docsForQuorum;
-	private int processNum;
 	private MessageCounter messageCounter;
 
 	public ClientMutexImpl(int processNum) {
 		super();
 		init();
-		this.processNum = processNum;
 	}
 
 	private void init() {
@@ -66,10 +64,9 @@ public class ClientMutexImpl {
 			updateMessagesSent(Constants.QUORUM_SERVER);
 			updateCSMessages();
 		}
-		Utils.log("Sent request to all waiting for replies");
 		while (pendingQuorumReply > 0) {
 			try {
-				Utils.log("sleeping for a while..");
+				Utils.log("Waiting for Grant....");
 				Thread.sleep(3000);
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -91,7 +88,6 @@ public class ClientMutexImpl {
 
 	public void mapQuorumDOS(HashMap<Integer, DataOutputStream> quorums) {
 		docsForQuorum = quorums;
-		// Utils.printSelectedQuorum2(quorums);
 	}
 
 }
