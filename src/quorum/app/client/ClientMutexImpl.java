@@ -1,6 +1,9 @@
 package quorum.app.client;
 
+import java.io.BufferedWriter;
 import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileWriter;
 import java.sql.Timestamp;
 import java.util.HashMap;
 
@@ -10,11 +13,14 @@ import quorum.app.util.Utils;
 public class ClientMutexImpl {
 	private int pendingQuorumReply;
 	HashMap<Integer, DataOutputStream> docsForQuorum;
+	HashMap<Integer, Boolean> quorumReplies;
 	private MessageCounter messageCounter;
+	private int clientID;
 
-	public ClientMutexImpl(int processNum) {
+	public ClientMutexImpl(int clientID) {
 		super();
 		init();
+		this.clientID = clientID;
 	}
 
 	private void init() {
@@ -34,8 +40,9 @@ public class ClientMutexImpl {
 		this.pendingQuorumReply = remreply;
 	}
 
-	public void updatePendingQuorumReply() {
+	public void updatePendingQuorumReply(int quorumID) {
 		pendingQuorumReply--;
+		quorumReplies.put(quorumID, true);
 	}
 
 	public void updateMessagesSent(String entity) {
@@ -64,9 +71,41 @@ public class ClientMutexImpl {
 			updateMessagesSent(Constants.QUORUM_SERVER);
 			updateCSMessages();
 		}
+		Timestamp pollBegin = Utils.getTimestamp();
 		while (pendingQuorumReply > 0) {
 			try {
 				Utils.log("Waiting for Grant....");
+				Timestamp current = Utils.getTimestamp();
+				int diff = Utils.getTimeDifference(pollBegin, current);
+				if (diff >= Constants.DEADLOCK_TIMEOUT) {
+					Utils.log("ALERT: Deadlock Detected !");
+					Utils.log("===================== DEADLOCK SITUATION:" + clientID + " ===================== ");
+					Utils.log("Deadlock occurred at Client:" + clientID + ". Details below.");
+					Utils.log("CS Request made at: [" + time + "]");
+					Utils.log("Quorum Request Set:" + Utils.getSelectedQuorumIDFromMap(docsForQuorum));
+					Utils.log("Received Quorum Replies: " + Utils.getRepliedAndPendingQuorums(quorumReplies).get(0));
+					Utils.log("Pending Quorum Replies Possibly Causing Deadlock: "
+							+ Utils.getRepliedAndPendingQuorums(quorumReplies).get(1));
+					String accessFile = Constants.HOME + Constants.CLIENT_LOG_FOLDER + Constants.CLIENT_LOG_FILE
+							+ clientID + Constants.FILE_EXT;
+					File f = new File(accessFile);
+					FileWriter fw = new FileWriter(f, true);
+					BufferedWriter filewriter = new BufferedWriter(fw);
+					filewriter.write("===================== DEADLOCK SITUATION:" + clientID + " ===================== "
+							+ Constants.EOL);
+					filewriter.write("Deadlock occurred at Client:" + clientID + ". Details below." + Constants.EOL);
+					filewriter.write("CS Request made at: [" + time + "]" + Constants.EOL);
+					filewriter.write(
+							"Quorum Request Set:" + Utils.getSelectedQuorumIDFromMap(docsForQuorum) + Constants.EOL);
+					filewriter.write("Received Quorum Replies: "
+							+ Utils.getRepliedAndPendingQuorums(quorumReplies).get(0) + Constants.EOL);
+					filewriter.write("Pending Quorum Replies Possibly Causing Deadlock: "
+							+ Utils.getRepliedAndPendingQuorums(quorumReplies).get(1) + Constants.EOL);
+					filewriter.close();
+					fw.close();
+
+					Thread.sleep(100000);
+				}
 				Thread.sleep(3000);
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -88,6 +127,13 @@ public class ClientMutexImpl {
 
 	public void mapQuorumDOS(HashMap<Integer, DataOutputStream> quorums) {
 		docsForQuorum = quorums;
+		initialiseQuorumReplies();
+	}
+
+	private void initialiseQuorumReplies() {
+		quorumReplies = new HashMap<Integer, Boolean>();
+		for (Integer id : docsForQuorum.keySet())
+			quorumReplies.put(id, false);
 	}
 
 }

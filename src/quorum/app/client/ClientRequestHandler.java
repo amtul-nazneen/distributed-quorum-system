@@ -59,7 +59,8 @@ public class ClientRequestHandler implements Runnable {
 							Utils.log("Received GRANT from :------>"
 									+ Utils.getQuorumServerFromHost(socket.getInetAddress().getHostName()) + " at "
 									+ "[" + grantTimestamp + "]");
-							clientMutexImpl.updatePendingQuorumReply();
+							clientMutexImpl.updatePendingQuorumReply(
+									Utils.getQuorumIDFromHost(socket.getInetAddress().getHostName()));
 							clientMutexImpl.updateMessagesReceived(Constants.QUORUM_SERVER);
 							clientMutexImpl.updateCSMessages();
 						}

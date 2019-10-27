@@ -3,7 +3,7 @@ package test;
 import quorum.app.server.ClientRequestCounter;
 import quorum.app.util.Constants;
 
-public class Hello {
+public class SampleTest {
 	public static void main(String[] args) {
 		// System.out.println(allReqsCompleted());
 		String accessFile = Constants.HOME + Constants.CLIENT_LOG_FOLDER + Constants.CLIENT_LOG_FILE + 1

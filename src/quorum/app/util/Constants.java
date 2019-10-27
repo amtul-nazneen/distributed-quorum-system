@@ -7,12 +7,14 @@ package quorum.app.util;
  * Utility class to hold the constants/configurations
  */
 public class Constants {
-	/*
-	 * ------ Section I: Begin of: No. of random requests to be generated for each
-	 * client ------
-	 */
+
+	/*------ Section I: Begin of: No. of clients, requests for clients ------*/
+
+	public static final int TOTAL_REQUESTS = 20;
+	public static final int TOTAL_CLIENTS = 5;
 
 	/* ------ Section II: Begin of DC machines to program model mapping ------ */
+
 	public static final int SERVER_PORT = 6666;
 
 	public static final String CLIENT1 = "dc11.utdallas.edu";
@@ -30,51 +32,29 @@ public class Constants {
 	public static final String QUORUM7_HOST = "dc07.utdallas.edu";
 
 	public static final String FILESERVER_HOST = "dc10.utdallas.edu";
-	/*
-	 * ------ Section III: Begin of: Thread.sleep value for each client, between
-	 * critical sections ------
-	 */
-	/*
-	 * ------ Section IV: Begin of:Misc. configurations ------
-	 */
+
+	/* ------ Section III: Begin of: Various Timeout values ------ */
+
 	public static final boolean ENABLE_SOCKET_CLOSE = false;
+
 	public static final int CLIENT_TIMEOUT = 10;
 	public static final int SERVER_TIMEOUT = 20;
-	public static final int TOTAL_REQUESTS = 20;
-	public static final int TOTAL_CLIENTS = 1;
-	public static final int CLIENT1_WAIT_TIME = 2000;
-	public static final int CLIENT2_WAIT_TIME = 2000;
-	public static final int CLIENT3_WAIT_TIME = 3700;
-	public static final int CLIENT4_WAIT_TIME = 3000;
-	public static final int CLIENT5_WAIT_TIME = 2500;
-	/*
-	 * ------ Section V: Begin of:Misc. configurations ------
-	 */
+	public static final int DEADLOCK_TIMEOUT = 90;
 
-	public static final String SERVER_WRITE_MESSAGE = "Request from:---->";
-	public static final String SERVER_SUCCESS = "success";
+	public static final int CLIENT1_WAIT_TIME_NEXT_CS = 2000;
+	public static final int CLIENT2_WAIT_TIME_NEXT_CS = 2000;
+	public static final int CLIENT3_WAIT_TIME_NEXT_CS = 3700;
+	public static final int CLIENT4_WAIT_TIME_NEXT_CS = 3000;
+	public static final int CLIENT5_WAIT_TIME_NEXT_CS = 2500;
 
-	public static final String SERVER_0 = "s0";
+	public static final int CLIENT1_CS_TIME = 1000;
+	public static final int CLIENT2_CS_TIME = 1500;
+	public static final int CLIENT3_CS_TIME = 2000;
+	public static final int CLIENT4_CS_TIME = 2500;
+	public static final int CLIENT5_CS_TIME = 3000;
 
-	public static final String HOME = "/home/eng/a/axn180041/quorum/";
-	public static final String CLIENT_LOG_FOLDER = "datalog/client/";
-	public static final String QUORUM_LOG_FOLDER = "datalog/quorum/";
-	public static final String SERVER_LOG_FOLDER = "datalog/server/";
-	public static final String CLIENT_LOG_FILE = "Client";
-	public static final String QUORUM_LOG_FILE = "Quorum";
-	public static final String SERVER_LOG_FILE = "FileServer";
+	/* ------Section IV: Begin of:Message Configurations------ */
 
-	public static final String FILE_EXT = ".txt";
-	public static final String EOL = "\n";
-
-	public static final String FILE0_NAME = "file0.txt";
-	public static final String OUTPUT_FILE = "Output.txt";
-
-	public static final String REQUEST = "REQUEST";
-
-	/*
-	 * ------ QUORUM BEGINS
-	 */
 	public static final String LOCKED = "locked";
 	public static final String UNLOCKED = "unlocked";
 	public static final String GRANT = "grant";
@@ -84,5 +64,23 @@ public class Constants {
 	public static final String COMPLETE_ACK = "complete-ack";
 	public static final String FILE_SERVER = "file";
 	public static final String QUORUM_SERVER = "quorum";
+	public static final String REQUEST = "REQUEST";
+	public static final String SERVER_SUCCESS = "success";
+
+	/* ------Section V: Begin of:Misc. configurations------ */
+
+	public static final String SERVER_WRITE_MESSAGE = "Request from:---->";
+	public static final String SERVER_0 = "s0";
+	public static final String HOME = "/home/eng/a/axn180041/quorum/";
+	public static final String CLIENT_LOG_FOLDER = "datalog/client/";
+	public static final String QUORUM_LOG_FOLDER = "datalog/quorum/";
+	public static final String SERVER_LOG_FOLDER = "datalog/server/";
+	public static final String CLIENT_LOG_FILE = "Client";
+	public static final String QUORUM_LOG_FILE = "Quorum";
+	public static final String SERVER_LOG_FILE = "FileServer";
+	public static final String FILE_EXT = ".txt";
+	public static final String EOL = "\n";
+	public static final String FILE0_NAME = "file0.txt";
+	public static final String OUTPUT_FILE = "Output.txt";
 
 }

@@ -6,9 +6,11 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author amtul.nazneen
@@ -21,6 +23,7 @@ public class Utils {
 
 	public static HashMap<String, String> hosttoprocess = new HashMap<String, String>();
 	public static HashMap<String, Integer> hosttoclientid = new HashMap<String, Integer>();
+	public static HashMap<String, Integer> hosttoquorumid = new HashMap<String, Integer>();
 	public static HashMap<String, String> serverToName = new HashMap<String, String>();
 	public static HashMap<Integer, String> clientidtoprocess = new HashMap<Integer, String>();
 
@@ -96,6 +99,17 @@ public class Utils {
 		return serverToName.get(host);
 	}
 
+	public static int getQuorumIDFromHost(String host) {
+		hosttoquorumid.put(Constants.QUORUM1_HOST, 1);
+		hosttoquorumid.put(Constants.QUORUM2_HOST, 2);
+		hosttoquorumid.put(Constants.QUORUM3_HOST, 3);
+		hosttoquorumid.put(Constants.QUORUM4_HOST, 4);
+		hosttoquorumid.put(Constants.QUORUM5_HOST, 5);
+		hosttoquorumid.put(Constants.QUORUM6_HOST, 6);
+		hosttoquorumid.put(Constants.QUORUM7_HOST, 7);
+		return hosttoquorumid.get(host);
+	}
+
 	public static String getFileServerFromHost() {
 		return "FileServer1";
 	}
@@ -143,24 +157,52 @@ public class Utils {
 
 	}
 
-	public static void printSelectedQuorum2(HashMap<Integer, DataOutputStream> quorums) {
+	public static String getSelectedQuorumIDFromMap(HashMap<Integer, DataOutputStream> quorums) {
 		String quorum = "";
 		for (Integer quorumID : quorums.keySet())
 			quorum = quorum + quorumID + ",";
-		Utils.log("Selected Quorum in MutexClass:" + " --->" + quorum.substring(0, quorum.length() - 1));
+		return quorum.substring(0, quorum.length() - 1);
 
 	}
 
 	public static int getWaitTime(int clientId) {
 		if (clientId == 1)
-			return Constants.CLIENT1_WAIT_TIME;
+			return Constants.CLIENT1_WAIT_TIME_NEXT_CS;
 		else if (clientId == 2)
-			return Constants.CLIENT2_WAIT_TIME;
+			return Constants.CLIENT2_WAIT_TIME_NEXT_CS;
 		else if (clientId == 3)
-			return Constants.CLIENT3_WAIT_TIME;
+			return Constants.CLIENT3_WAIT_TIME_NEXT_CS;
 		else if (clientId == 4)
-			return Constants.CLIENT4_WAIT_TIME;
+			return Constants.CLIENT4_WAIT_TIME_NEXT_CS;
 		else
-			return Constants.CLIENT5_WAIT_TIME;
+			return Constants.CLIENT5_WAIT_TIME_NEXT_CS;
+	}
+
+	public static int getCSTime(int clientId) {
+		if (clientId == 1)
+			return Constants.CLIENT1_CS_TIME;
+		else if (clientId == 2)
+			return Constants.CLIENT2_CS_TIME;
+		else if (clientId == 3)
+			return Constants.CLIENT3_CS_TIME;
+		else if (clientId == 4)
+			return Constants.CLIENT4_CS_TIME;
+		else
+			return Constants.CLIENT5_CS_TIME;
+	}
+
+	public static List<String> getRepliedAndPendingQuorums(HashMap<Integer, Boolean> quorumReplies) {
+		List<String> result = new ArrayList<String>();
+		String replied = "", pending = "";
+		for (Map.Entry<Integer, Boolean> entry : quorumReplies.entrySet()) {
+			if (entry.getValue()) {
+				replied = replied + entry.getKey() + ",";
+			} else {
+				pending = pending + entry.getKey() + ",";
+			}
+		}
+		result.add(0, replied.substring(0, replied.length() - 1));
+		result.add(1, pending.substring(0, pending.length() - 1));
+		return result;
 	}
 }

@@ -131,6 +131,7 @@ public class Client {
 			boolean requestsCompleted = false;
 			while (!requestsCompleted) {
 				csRequestCount++;
+				/* Randomize - Exiting and re-requesting */
 				Thread.sleep((long) (Math.random() * Utils.getWaitTime(clientID)));
 				Utils.log(
 						"~~|~~|~~|~~|~~|~~|~~ CS Access Requesting: ------------------------------------>->->->->->->->->->"
@@ -204,6 +205,8 @@ public class Client {
 				gotReply = true;
 			}
 		}
+		/* Randomising- time spent in critical section */
+		Thread.sleep((long) (Math.random() * Utils.getCSTime(clientID)));
 		Utils.log("===================== Completed  CS_Access: [[[[[[[[[ ---- " + csRequestCount
 				+ " ---- ]]]]]]]]] ===================");
 	}
