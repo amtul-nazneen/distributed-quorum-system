@@ -8,6 +8,13 @@ import java.util.HashMap;
 import quorum.app.util.Constants;
 import quorum.app.util.Utils;
 
+/**
+ * @author amtul.nazneen
+ */
+
+/**
+ * Mutual Exlusion Implementation class at the Quorum Node
+ */
 public class QuorumMutexImpl {
 	private String state;
 	ArrayList<QuorumQueuedRequest> queuedRequest;
@@ -15,6 +22,10 @@ public class QuorumMutexImpl {
 	private int messagesReceivedClient;
 	private int messagesSentClient;
 
+	/**
+	 * Constructor for Mutex class, initially the state of the quorum node is
+	 * unlocked
+	 */
 	public QuorumMutexImpl() {
 		super();
 		this.state = Constants.UNLOCKED;
@@ -68,6 +79,11 @@ public class QuorumMutexImpl {
 		this.clientDosMap = clientDosMap;
 	}
 
+	/**
+	 * Choose a request from the deferred requests queue
+	 * 
+	 * @return deferred request
+	 */
 	public QuorumQueuedRequest chooseFromDeferredQueue() {
 		Collections.sort(queuedRequest, QuorumQueuedRequest.QUORUM_REQ_COMP);
 		QuorumQueuedRequest chosenRequest = queuedRequest.get(0);
@@ -75,6 +91,9 @@ public class QuorumMutexImpl {
 		return chosenRequest;
 	}
 
+	/**
+	 * Remove from the deferred queue once the request is served
+	 */
 	public void deleteFromQuorumQueuedRequest() {
 		this.queuedRequest.remove(0);
 		Utils.log("Removed the served request, QuorumQueue size:-----> " + this.queuedRequest.size());

@@ -4,6 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * @author amtul.nazneen
+ */
+
+/**
+ * Quorum Binary Tree class
+ */
 public class QuorumTree {
 	QNode root;
 	List<Integer> quorum;
@@ -15,6 +22,9 @@ public class QuorumTree {
 		rand = new Random();
 	}
 
+	/**
+	 * Creates a tree with with 7 nodes as full binary tree
+	 */
 	private void createTree() {
 		QNode root = new QNode(1);
 		QNode two = new QNode(2);
@@ -32,7 +42,12 @@ public class QuorumTree {
 		this.root = root;
 	}
 
-	public void displayRec(QNode root) {
+	/**
+	 * Algorithm for randomly choosing a quorum set based on the 3 recursion rules
+	 * 
+	 * @param root
+	 */
+	public void recursiveQuorumSet(QNode root) {
 		if (root == null)
 			return;
 		if (root.left == null && root.right == null) {
@@ -43,14 +58,14 @@ public class QuorumTree {
 		if (i % 3 == 2) {
 			quorum.add(root.id);
 			root = root.left;
-			displayRec(root);
+			recursiveQuorumSet(root);
 		} else if (i % 3 == 1) {
 			quorum.add(root.id);
 			root = root.right;
-			displayRec(root);
+			recursiveQuorumSet(root);
 		} else if (i % 3 == 0) {
-			displayRec(root.left);
-			displayRec(root.right);
+			recursiveQuorumSet(root.left);
+			recursiveQuorumSet(root.right);
 		}
 	}
 

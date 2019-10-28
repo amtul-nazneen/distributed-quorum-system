@@ -8,6 +8,12 @@ import java.net.Socket;
 import quorum.app.util.Constants;
 import quorum.app.util.Utils;
 
+/**
+ * @author amtul.nazneen
+ */
+/**
+ * Class that runs the File Server
+ */
 public class Server {
 
 	public static void main(String[] args) throws Exception {

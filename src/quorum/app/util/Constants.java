@@ -42,16 +42,16 @@ public class Constants {
 	public static final int DEADLOCK_TIMEOUT = 90;
 
 	public static final int CLIENT1_WAIT_TIME_NEXT_CS = 2000;
-	public static final int CLIENT2_WAIT_TIME_NEXT_CS = 2000;
-	public static final int CLIENT3_WAIT_TIME_NEXT_CS = 3700;
-	public static final int CLIENT4_WAIT_TIME_NEXT_CS = 3000;
-	public static final int CLIENT5_WAIT_TIME_NEXT_CS = 2500;
+	public static final int CLIENT2_WAIT_TIME_NEXT_CS = 2500;
+	public static final int CLIENT3_WAIT_TIME_NEXT_CS = 4500;
+	public static final int CLIENT4_WAIT_TIME_NEXT_CS = 3500;
+	public static final int CLIENT5_WAIT_TIME_NEXT_CS = 5500;
 
-	public static final int CLIENT1_CS_TIME = 1000;
-	public static final int CLIENT2_CS_TIME = 1500;
-	public static final int CLIENT3_CS_TIME = 2000;
-	public static final int CLIENT4_CS_TIME = 2500;
-	public static final int CLIENT5_CS_TIME = 3000;
+	public static final int CLIENT1_CS_TIME = 10000;
+	public static final int CLIENT2_CS_TIME = 15000;
+	public static final int CLIENT3_CS_TIME = 20000;
+	public static final int CLIENT4_CS_TIME = 25000;
+	public static final int CLIENT5_CS_TIME = 30000;
 
 	/* ------Section IV: Begin of:Message Configurations------ */
 
@@ -64,7 +64,7 @@ public class Constants {
 	public static final String COMPLETE_ACK = "complete-ack";
 	public static final String FILE_SERVER = "file";
 	public static final String QUORUM_SERVER = "quorum";
-	public static final String REQUEST = "REQUEST";
+	public static final String REQUEST = "request";
 	public static final String SERVER_SUCCESS = "success";
 
 	/* ------Section V: Begin of:Misc. configurations------ */

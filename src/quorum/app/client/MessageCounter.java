@@ -1,5 +1,13 @@
 package quorum.app.client;
 
+/**
+ * @author amtul.nazneen
+ */
+
+/**
+ * Class to keep track of the total messages sent and received by each client
+ * node from other nodes [quorum and file server]
+ */
 public class MessageCounter {
 	private int messagesSentFileServer;
 	private int messagesSentQuorumServer;

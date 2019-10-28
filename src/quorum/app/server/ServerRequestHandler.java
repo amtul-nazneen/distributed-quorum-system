@@ -10,6 +10,13 @@ import java.net.Socket;
 import quorum.app.util.Constants;
 import quorum.app.util.Utils;
 
+/**
+ * @author amtul.nazneen
+ */
+
+/**
+ * Thread class that handles the file write requests from each connected client
+ */
 public class ServerRequestHandler implements Runnable {
 	Socket socket;
 	final DataInputStream dis;
@@ -37,7 +44,8 @@ public class ServerRequestHandler implements Runnable {
 
 	/**
 	 * Thread run method that keeps checking for incoming messages from the
-	 * connected client and sends reply once the task of read/write/enquire is done
+	 * connected client and sends reply once the task of write is done It also sends
+	 * a complete message when all the requests from a client have been satisfied
 	 */
 	@Override
 	public void run() {
@@ -92,6 +100,11 @@ public class ServerRequestHandler implements Runnable {
 		}
 	}
 
+	/**
+	 * Log Data Collection to the file FileServer.txt
+	 * 
+	 * @throws Exception
+	 */
 	private void logDataCollectionToFile() throws Exception {
 		String accessFile = Constants.HOME + Constants.SERVER_LOG_FOLDER + Constants.SERVER_LOG_FILE
 				+ Constants.FILE_EXT;

@@ -9,6 +9,13 @@ import java.net.Socket;
 import quorum.app.util.Constants;
 import quorum.app.util.Utils;
 
+/**
+ * @author amtul.nazneen
+ */
+
+/**
+ * Main class that starts the quorum for a particular Quorum Server ID
+ */
 public class QuorumServer {
 	public static void main(String[] args) throws IOException {
 		if (args.length < 1) {

@@ -11,6 +11,14 @@ import java.sql.Timestamp;
 import quorum.app.util.Constants;
 import quorum.app.util.Utils;
 
+/**
+ * @author amtul.nazneen
+ */
+
+/**
+ * Thread class for handling the requests received from a client by the quorum
+ * node
+ */
 class QuorumRequestHandler extends Thread {
 	final DataInputStream dis;
 	final DataOutputStream dos;
@@ -19,6 +27,16 @@ class QuorumRequestHandler extends Thread {
 	QuorumMutexImpl quorumMutex;
 	int quorumID;
 
+	/**
+	 * Constructor for creating the thread handler class when a client connects to q
+	 * quorum
+	 * 
+	 * @param s
+	 * @param dis
+	 * @param dos
+	 * @param quorumMutex
+	 * @param quorumID
+	 */
 	public QuorumRequestHandler(Socket s, DataInputStream dis, DataOutputStream dos, QuorumMutexImpl quorumMutex,
 			int quorumID) {
 		this.s = s;
@@ -29,6 +47,10 @@ class QuorumRequestHandler extends Thread {
 		this.quorumID = quorumID;
 	}
 
+	/**
+	 * Thread run method For each request received from a client, performs the reply
+	 * or defers it based on the quorums lock status
+	 */
 	@Override
 	public void run() {
 		String received;
@@ -97,6 +119,11 @@ class QuorumRequestHandler extends Thread {
 
 	}
 
+	/**
+	 * Logs the data collection to a file Quorum<quorumID>.txt
+	 * 
+	 * @throws Exception
+	 */
 	private void logDataCollectionToFile() throws Exception {
 		String accessFile = Constants.HOME + Constants.QUORUM_LOG_FOLDER + Constants.QUORUM_LOG_FILE + quorumID
 				+ Constants.FILE_EXT;

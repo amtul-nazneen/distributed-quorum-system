@@ -14,6 +14,13 @@ import quorum.app.quorumServer.tree.RandomQuorumGenerator;
 import quorum.app.util.Constants;
 import quorum.app.util.Utils;
 
+/**
+ * @author amtul.nazneen
+ */
+
+/**
+ * Main Client that starts the client
+ */
 public class Client {
 
 	private int clientID;
@@ -32,6 +39,12 @@ public class Client {
 		this.clientID = clientID;
 	}
 
+	/**
+	 * Connects to the quorum servers, file server Randomly chooses a quorum set,
+	 * and requests to enter the critical section
+	 * 
+	 * @throws Exception
+	 */
 	public void startClient() throws Exception {
 		Utils.logWithSeparator("Starting Client ID:" + clientID);
 		csRequestCount = 0;
@@ -132,7 +145,7 @@ public class Client {
 			while (!requestsCompleted) {
 				csRequestCount++;
 				/* Randomize - Exiting and re-requesting */
-				Thread.sleep((long) (Math.random() * Utils.getWaitTime(clientID)));
+				Thread.sleep((long) (Utils.getWaitTime(clientID)));
 				Utils.log(
 						"~~|~~|~~|~~|~~|~~|~~ CS Access Requesting: ------------------------------------>->->->->->->->->->"
 								+ csRequestCount);
@@ -186,6 +199,14 @@ public class Client {
 		}
 	}
 
+	/**
+	 * Executes Critical Section by connecting to the file server
+	 * 
+	 * @param dosFileServer
+	 * @param disFileServer
+	 * @param clientMutex
+	 * @throws Exception
+	 */
 	private void executeCS(DataOutputStream dosFileServer, DataInputStream disFileServer, ClientMutexImpl clientMutex)
 			throws Exception {
 		Utils.log("===================== Starting   CS_Access: [[[[[[[[[ ---- " + csRequestCount
@@ -206,17 +227,31 @@ public class Client {
 			}
 		}
 		/* Randomising- time spent in critical section */
-		Thread.sleep((long) (Math.random() * Utils.getCSTime(clientID)));
+		Thread.sleep((long) (Utils.getCSTime(clientID)));
 		Utils.log("===================== Completed  CS_Access: [[[[[[[[[ ---- " + csRequestCount
 				+ " ---- ]]]]]]]]] ===================");
 	}
 
+	/**
+	 * Sends complete notification server,once all requests are done
+	 * 
+	 * @param dosFileServer
+	 * @param clientMutex
+	 * @throws Exception
+	 */
 	private void sendCompleteNotifServer(DataOutputStream dosFileServer, ClientMutexImpl clientMutex) throws Exception {
 		Utils.log("Sending COMPLETE notification to FileServer");
 		dosFileServer.writeUTF(Constants.COMPLETE + "," + clientID + "," + Utils.getTimestampForLog());
 		clientMutex.updateMessagesSent(Constants.FILE_SERVER);
 	}
 
+	/**
+	 * Wait for final acknowledgement from FileServer to stop computation
+	 * 
+	 * @param disFileServer
+	 * @param clientMutex
+	 * @throws Exception
+	 */
 	private void waitForAckFileServer(DataInputStream disFileServer, ClientMutexImpl clientMutex) throws Exception {
 		boolean gotAck = false;
 		String ack = "";
@@ -231,6 +266,12 @@ public class Client {
 		}
 	}
 
+	/**
+	 * Log the data collection to file Client<clientID>.txt
+	 * 
+	 * @param clientMutex
+	 * @throws Exception
+	 */
 	private void logDataCollectionToFile(ClientMutexImpl clientMutex) throws Exception {
 		String accessFile = Constants.HOME + Constants.CLIENT_LOG_FOLDER + Constants.CLIENT_LOG_FILE + clientID
 				+ Constants.FILE_EXT;

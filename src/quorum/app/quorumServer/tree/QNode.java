@@ -1,5 +1,12 @@
 package quorum.app.quorumServer.tree;
 
+/**
+ * @author amtul.nazneen
+ */
+
+/**
+ * Node class for the Binary Quorum Tree Structure
+ */
 public class QNode {
 	int id;
 	QNode left;

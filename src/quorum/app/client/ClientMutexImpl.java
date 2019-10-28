@@ -10,6 +10,13 @@ import java.util.HashMap;
 import quorum.app.util.Constants;
 import quorum.app.util.Utils;
 
+/**
+ * @author amtul.nazneen
+ */
+
+/**
+ * Thread Class that handles the Mutual Exclusion at Client
+ */
 public class ClientMutexImpl {
 	private int pendingQuorumReply;
 	HashMap<Integer, DataOutputStream> docsForQuorum;
@@ -45,6 +52,11 @@ public class ClientMutexImpl {
 		quorumReplies.put(quorumID, true);
 	}
 
+	/**
+	 * Update the sent messages count for File and Quorum Server
+	 * 
+	 * @param entity
+	 */
 	public void updateMessagesSent(String entity) {
 		if (Constants.FILE_SERVER.equalsIgnoreCase(entity))
 			this.messageCounter.updateMessagesSentFileServer();
@@ -52,6 +64,11 @@ public class ClientMutexImpl {
 			this.messageCounter.updateMessagesSentQuorumServer();
 	}
 
+	/**
+	 * Update the received messages count for File and Quorum Server
+	 * 
+	 * @param entity
+	 */
 	public void updateMessagesReceived(String entity) {
 		if (Constants.FILE_SERVER.equalsIgnoreCase(entity))
 			this.messageCounter.updateMessagesReceivedFileServer();
@@ -63,6 +80,15 @@ public class ClientMutexImpl {
 		this.messageCounter.setCSMessages(this.messageCounter.getCSMessages() + 1);
 	}
 
+	/**
+	 * Send request to selected quorum and wait for their reply Detect for deadlock
+	 * after a fixed timeout value and log the circumstances in which deadlock
+	 * occured
+	 * 
+	 * @param time
+	 * @return
+	 * @throws Exception
+	 */
 	public boolean myCSRequestBegin(Timestamp time) throws Exception {
 		setPendingQuorumReply(docsForQuorum.size());
 
@@ -115,6 +141,11 @@ public class ClientMutexImpl {
 		return true;
 	}
 
+	/**
+	 * Send release to the quorum set
+	 * 
+	 * @throws Exception
+	 */
 	public void sendRelease() throws Exception {
 		Utils.log("Sending RELEASE to my quorum");
 		Timestamp releaseTime = Utils.getTimestamp();
@@ -125,11 +156,19 @@ public class ClientMutexImpl {
 		}
 	}
 
+	/**
+	 * Set the map to the selected quorum
+	 * 
+	 * @param quorums
+	 */
 	public void mapQuorumDOS(HashMap<Integer, DataOutputStream> quorums) {
 		docsForQuorum = quorums;
 		initialiseQuorumReplies();
 	}
 
+	/**
+	 * Initialise the quorum replies as false for all the quorum sets
+	 */
 	private void initialiseQuorumReplies() {
 		quorumReplies = new HashMap<Integer, Boolean>();
 		for (Integer id : docsForQuorum.keySet())

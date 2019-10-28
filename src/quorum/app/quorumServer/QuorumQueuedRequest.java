@@ -10,18 +10,17 @@ import quorum.app.util.Utils;
  */
 
 /**
- * Class object for DeferredReply object
+ * Class object for Quorum Deferred Request object
  */
 public class QuorumQueuedRequest implements Comparable<QuorumQueuedRequest> {
 	private int clientNum;
 	private Timestamp timestamp;
 
 	/**
-	 * Constructor for creating a deferred reply object
+	 * Constructor for creating a Quorum Deferred Request object
 	 * 
-	 * @param isDeferred: true/false
-	 * @param processNum: process num of the deferred reply
-	 * @param timestamp:  timestamp of the request before it had been deferred
+	 * @param clientNum: clientNum of the deferred reply
+	 * @param timestamp: timestamp of the request before it had been deferred
 	 */
 	public QuorumQueuedRequest(int clientNum, Timestamp timestamp) {
 		super();
@@ -52,7 +51,7 @@ public class QuorumQueuedRequest implements Comparable<QuorumQueuedRequest> {
 
 	/**
 	 * Comparator class to sort the deferred reply queues. First sorted based on
-	 * timestamp and then process num, if timestamps are the same
+	 * timestamp and then clientID, if timestamps are the same
 	 */
 	public static final Comparator<QuorumQueuedRequest> QUORUM_REQ_COMP = new Comparator<QuorumQueuedRequest>() {
 

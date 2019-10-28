@@ -4,6 +4,12 @@ import java.util.HashMap;
 
 import quorum.app.util.Constants;
 
+/**
+ * @author amtul.nazneen
+ */
+/**
+ * Class to count the client requests made to the file server
+ */
 public class ClientRequestCounter {
 	private HashMap<Integer, Integer> clientReqMap;
 	private HashMap<Integer, Boolean> clientReqCompleted;
@@ -67,6 +73,10 @@ public class ClientRequestCounter {
 		clientReqCompleted.put(clientID, true);
 	}
 
+	/**
+	 * Method to check if all requests from the connected clients have been
+	 * completed
+	 */
 	public boolean allReqsCompleted() {
 		boolean completed = false;
 		for (Boolean value : clientReqCompleted.values()) {

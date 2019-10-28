@@ -13,8 +13,7 @@ import quorum.app.util.Utils;
  */
 
 /**
- * Thread Class that handles incoming and outgoing request from the responsible
- * client
+ * Thread Class that handles incoming request from the quorum
  */
 public class ClientRequestHandler implements Runnable {
 	DataInputStream dis;
@@ -23,16 +22,16 @@ public class ClientRequestHandler implements Runnable {
 	ClientMutexImpl clientMutexImpl;
 
 	/**
-	 * Constructor for creating a handler for communication between the clients Each
-	 * channel to the other clients, is run as a separate thread
+	 * Constructor for creating a handler for communication between the clients and
+	 * other quorums ,is run as a separate thread
 	 * 
-	 * @param s:         Socket connection between the clients
-	 * @param mutexImpl: mutex object of each client
+	 * @param s
+	 * @param clientMutexImpl
 	 */
-	public ClientRequestHandler(Socket s, ClientMutexImpl ci) {
+	public ClientRequestHandler(Socket s, ClientMutexImpl clientMutexImpl) {
 		super();
 		this.socket = s;
-		this.clientMutexImpl = ci;
+		this.clientMutexImpl = clientMutexImpl;
 		try {
 			dis = new DataInputStream(s.getInputStream());
 			dos = new DataOutputStream(s.getOutputStream());
@@ -42,8 +41,8 @@ public class ClientRequestHandler implements Runnable {
 	}
 
 	/**
-	 * Thread run method that keeps checking for incoming requests from other
-	 * connect client and sends reply to the other client
+	 * Thread run method that keeps checking for grant replies from other connected
+	 * quorums
 	 */
 	@Override
 	public void run() {
