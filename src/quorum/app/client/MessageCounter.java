@@ -1,5 +1,8 @@
 package quorum.app.client;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author amtul.nazneen
  */
@@ -14,6 +17,8 @@ public class MessageCounter {
 	private int messagesReceivedFileServer;
 	private int messagesReceivedQuorumServer;
 	private int csMessages;
+	private List<Integer> latencyList;
+	private List<Integer> msgExchangeList;
 
 	public MessageCounter() {
 		super();
@@ -22,6 +27,8 @@ public class MessageCounter {
 		this.messagesSentFileServer = 0;
 		this.messagesSentQuorumServer = 0;
 		this.csMessages = 0;
+		latencyList = new ArrayList<Integer>();
+		msgExchangeList = new ArrayList<Integer>();
 	}
 
 	public int getMessagesSentFileServer() {
@@ -65,6 +72,14 @@ public class MessageCounter {
 		return messagesReceivedFileServer + messagesReceivedQuorumServer;
 	}
 
+	public List<Integer> getLatencyList() {
+		return latencyList;
+	}
+
+	public List<Integer> getMsgExchangeList() {
+		return msgExchangeList;
+	}
+
 	public void updateMessagesSentFileServer() {
 		messagesSentFileServer = messagesSentFileServer + 1;
 	}
@@ -79,6 +94,14 @@ public class MessageCounter {
 
 	public void updateMessagesReceivedQuorumServer() {
 		messagesReceivedQuorumServer = messagesReceivedQuorumServer + 1;
+	}
+
+	public void updateLatencyList(int latency) {
+		this.latencyList.add(latency);
+	}
+
+	public void updateMsgExchangeList(int msgsExchanged) {
+		this.msgExchangeList.add(msgsExchanged);
 	}
 
 }

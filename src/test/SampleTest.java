@@ -1,20 +1,39 @@
 package test;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import quorum.app.server.ClientRequestCounter;
 import quorum.app.util.Constants;
+import quorum.app.util.Utils;
 
 public class SampleTest {
 	public static void main(String[] args) {
+		List<Integer> j = new ArrayList<Integer>();
+		j.add(20);
+		j.add(50);
+		j.add(20);
+		j.add(120);
+		j.add(5);
+		Utils.log("Max:" + Utils.getMax(j));
+		Utils.log("Min:" + Utils.getMin(j));
+		Utils.log("Average:" + Utils.getAverage(j));
+
 		// System.out.println(allReqsCompleted());
+		for (int i = 0; i <= 15; i++) {
+			// System.out.println(ThreadLocalRandom.current().nextInt(1, 4) * 1000);
+			// System.out.println(ThreadLocalRandom.current().nextInt(2, 6));
+		}
+
 		String accessFile = Constants.HOME + Constants.CLIENT_LOG_FOLDER + Constants.CLIENT_LOG_FILE + 1
 				+ Constants.FILE_EXT;
 		String accessFile2 = Constants.HOME + Constants.QUORUM_LOG_FOLDER + Constants.QUORUM_LOG_FILE + 1
 				+ Constants.FILE_EXT;
 		String accessFile3 = Constants.HOME + Constants.SERVER_LOG_FOLDER + Constants.SERVER_LOG_FILE
 				+ Constants.FILE_EXT;
-		System.out.println(accessFile);
-		System.out.println(accessFile2);
-		System.out.println(accessFile3);
+		// System.out.println(accessFile);
+		// System.out.println(accessFile2);
+		// System.out.println(accessFile3);
 	}
 
 	public static boolean allReqsCompleted() {

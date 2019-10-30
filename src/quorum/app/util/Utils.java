@@ -205,4 +205,60 @@ public class Utils {
 		result.add(1, pending.substring(0, pending.length() - 1));
 		return result;
 	}
+
+	public static String printLatencyList(List<Integer> list) {
+		String str = "";
+		for (int i = 1; i <= list.size(); i++)
+			str += "[" + i + ":" + list.get(i - 1) + " ms ]";
+		return str;
+	}
+
+	public static String printMsgExchangeList(List<Integer> list) {
+		String str = "";
+		for (int i = 1; i <= list.size(); i++)
+			str += "[" + i + ":" + list.get(i - 1) + "msgs ]";
+		return str;
+	}
+
+	public static String getMax(List<Integer> list) {
+		String result = "";
+		int max = list.get(0);
+		int round = 1;
+		for (int i = 2; i <= list.size(); i++) {
+			if (list.get(i - 1) > max) {
+				max = list.get(i - 1);
+				round = i;
+			}
+		}
+		// List<Integer> result = new ArrayList<Integer>();
+		// result.add(0, round);
+		// result.add(1, max);
+		result = "[" + round + ":" + max + "]";
+		return result;
+	}
+
+	public static String getMin(List<Integer> list) {
+		String result = "";
+		int min = list.get(0);
+		int round = 1;
+		for (int i = 2; i <= list.size(); i++) {
+			if (list.get(i - 1) < min) {
+				min = list.get(i - 1);
+				round = i;
+			}
+		}
+		// List<Integer> result = new ArrayList<Integer>();
+		// result.add(0, round);
+		// result.add(1, min);
+		result = "[" + round + ":" + min + "]";
+		return result;
+	}
+
+	public static int getAverage(List<Integer> list) {
+		int sum = 0;
+		int total = list.size();
+		for (Integer val : list)
+			sum += val;
+		return sum / total;
+	}
 }

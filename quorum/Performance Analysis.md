@@ -1,4 +1,4 @@
-# Distributed Quorum System
+# Data Collection and Performance Analysis
 Implement Quorum System based Distributed Mutual Exclusion in a Multi-Client, Multi-Server model
 
 ## Getting Started
@@ -39,4 +39,3 @@ These instructions will get you a copy of the project up and running on your loc
 8. All the Data Collection points are logged for each node in _distributed-quorum-system/quorum/datalog_ folder for _Client_, _Server_ and _Quorum_ nodes
 9. If any Deadlock has been detected at a Client, the details are logged in _distributed-quorum-system/quorum/datalog/client/Client<clientID>.txt_ file
 10. The parameters for timeout can be configured in _quorum.app.utils.Constants_ file [Section III]
-11. The data collection and performance analysis is reported under _distributed-quorum-system/quorum/Performance Analysis.md_ doc.
