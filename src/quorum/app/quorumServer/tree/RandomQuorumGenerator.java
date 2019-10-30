@@ -3,6 +3,8 @@ package quorum.app.quorumServer.tree;
 import java.util.HashMap;
 import java.util.List;
 
+import quorum.app.util.Utils;
+
 /**
  * @author amtul.nazneen
  */
@@ -10,28 +12,28 @@ import java.util.List;
  * Class that Randomly generates a quorum set each time
  */
 public class RandomQuorumGenerator {
-	public static List<Integer> getQuorum(int clientId) {
-		QuorumTree qt = new QuorumTree();
-		qt.recursiveQuorumSet(qt.getRoot());
-		return qt.getQuorum();
+	public static List<Integer> getQuorum() {
+		SingletonQuorumTree quorumTree = SingletonQuorumTree.getInstance();
+		quorumTree.recursiveQuorumSet(quorumTree.getRoot());
+		return quorumTree.getQuorum();
 	}
 
 	/**
 	 * Tested method for testing the quorum sets
 	 */
 	public static void test() {
-		QuorumTree qt = new QuorumTree();
+		SingletonQuorumTree quorumTree = SingletonQuorumTree.getInstance();
 		HashMap<String, Integer> map = new HashMap<String, Integer>();
 		for (int i = 0; i < 500; i++) {
-			qt.getQuorum().clear();
-			qt.recursiveQuorumSet(qt.getRoot());
+			quorumTree.getQuorum().clear();
+			quorumTree.recursiveQuorumSet(quorumTree.getRoot());
 			String s = "";
-			for (Integer id : qt.getQuorum()) {
+			for (Integer id : quorumTree.getQuorum()) {
 				s = s + id + ",";
 			}
 			map.put(s.substring(0, s.length() - 1), 1);
 		}
-		System.out.println("Quorum Size Total:--" + map.size());
+		Utils.log("Quorum Size Total:--" + map.size());
 		for (String key : map.keySet())
 			System.out.println(key);
 	}

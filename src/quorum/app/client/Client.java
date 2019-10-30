@@ -26,7 +26,6 @@ public class Client {
 
 	private int clientID;
 	private int csRequestCount;
-	// private Random random;
 
 	public int getClientID() {
 		return clientID;
@@ -39,7 +38,6 @@ public class Client {
 	public Client(int clientID) {
 		super();
 		this.clientID = clientID;
-		// this.random = new Random();
 	}
 
 	/**
@@ -154,8 +152,8 @@ public class Client {
 				Utils.log(
 						"~~|~~|~~|~~|~~|~~|~~ CS Access Requesting: ------------------------------------>->->->->->->->->->"
 								+ csRequestCount);
-
-				List<Integer> quorumList = RandomQuorumGenerator.getQuorum(clientID);
+				Timestamp myRequestTime = Utils.getTimestamp();
+				List<Integer> quorumList = RandomQuorumGenerator.getQuorum();
 				String selectedQuorums = Utils.getSelectedQuorumID(quorumList);
 				Utils.log("Sending requests to randomly chosen quorum:----> { " + selectedQuorums + " }");
 				HashMap<Integer, DataOutputStream> quorums = new HashMap<Integer, DataOutputStream>();
@@ -163,7 +161,7 @@ public class Client {
 					quorums.put(quorumId, allQuorumServers.get(quorumId));
 				}
 
-				Timestamp myRequestTime = Utils.getTimestamp();
+				// Timestamp myRequestTime = Utils.getTimestamp();
 				clientMutex.mapQuorumDOS(quorums);
 				clientMutex.getMessageCounter().resetCSMessages();
 				clientMutex.myCSRequestBegin(myRequestTime);

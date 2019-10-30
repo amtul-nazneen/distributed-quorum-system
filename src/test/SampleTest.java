@@ -2,22 +2,28 @@ package test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import quorum.app.server.ClientRequestCounter;
 import quorum.app.util.Constants;
-import quorum.app.util.Utils;
 
 public class SampleTest {
 	public static void main(String[] args) {
+		Random rand = new Random();
+		int jk = 10;
+		while (jk-- > 0) {
+			int i = rand.nextInt(3);
+			System.out.println(i);
+		}
 		List<Integer> j = new ArrayList<Integer>();
 		j.add(20);
 		j.add(50);
 		j.add(20);
 		j.add(120);
 		j.add(5);
-		Utils.log("Max:" + Utils.getMax(j));
-		Utils.log("Min:" + Utils.getMin(j));
-		Utils.log("Average:" + Utils.getAverage(j));
+		// Utils.log("Max:" + Utils.getMax(j));
+		// Utils.log("Min:" + Utils.getMin(j));
+		// Utils.log("Average:" + Utils.getAverage(j));
 
 		// System.out.println(allReqsCompleted());
 		for (int i = 0; i <= 15; i++) {
