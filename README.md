@@ -19,7 +19,7 @@ These instructions will get you a copy of the project up and running on your loc
 ### Steps to run the application
 1. Open Project in any IDE
 2. Generate the jar [Ex: quorum.jar]
-3. Copy the entire folder _quorum_[folder path in the project: distributed-quorum-system/quorum] to the dc machines of client, quorum & file servers and place the jar _within_ the _mutex_ folder
+3. Copy the entire folder _quorum_[folder path in the project: distributed-quorum-system/quorum] to the dc machines of client, quorum & file servers and place the jar _within_ the _quorum_ folder
      * In case any of the machines are unavailable make changes in the _quorum.app.utils.Constants_ file[Section II] to reflect the new machine to server/client mapping
      * This folder has the s0 directory having file0.txt that is be available to the file server for writing
      * This folder also has Data Log files under the respective node folders in _distributed-quorum-system/quorum/datalog_ folder which capture the data log for no: of messages sent, received and deadlock if any detected
