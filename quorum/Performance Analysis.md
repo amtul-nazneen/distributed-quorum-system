@@ -22,7 +22,7 @@ Perform Data Collection and Analysis for the Distributed Quorum based Mutual Exc
 
 ### Detailed Analysis
 Metrics with details
-    * **Total number of Messages Sent by**
+   * **Total number of Messages Sent by**
       * Quorum Servers
       * Client Servers
       * File Server
