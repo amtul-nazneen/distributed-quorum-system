@@ -4,15 +4,24 @@ Perform Data Collection and Analysis for the Distributed Quorum based Mutual Exc
 ### Overview
 1. Model has 7 Quorum Servers, 5 Clients and 1 File Server
 2. Data Collection and Analysis has been done for the below
-    * The total number of messages sent by each node, either server node or client node, from the beginning until it sends the completion notification.
-     * The total number of messages received by each node, either server node or client node, from the beginning until it sends the completion notification.
-     * For each attempt to enter the critical section by each node, report the following:
-        * The total number of messages exchanged.
-        * The total elapsed time between making a request and being able to enter the critical section (latency).
-     * Rerun your experiment with other values of: 
-          * (a) time between a client exiting its critical section and issuing its next request, and 
-          * (b) time spent in the critical section. Report what impact do these changes have on perfor- mance, specifically latency.    
-          * Also, report if you come across any deadlock situation.
+    * Total number of Messages Sent by
+      * Quorum Servers
+      * Client Servers
+      * File Server
+   * Total number of Messages Received by
+      * Quorum Servers
+      * Client Servers
+      * File Server
+   * Per Critical Section
+      * Total Number of Messages Exchanged
+      * Latency (Total elapsed time between making a request and being able to enter the critical section)
+   * Repeated with varying values and reported their impact on latency
+      * Time between a client exiting its critical section and issuing its next request
+      * Time spent in the critical section
+  * Report any Deadlock situation
+
+
+
 
 ### Steps to run the application
 1. Open Project in any IDE
