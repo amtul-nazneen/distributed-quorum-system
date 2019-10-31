@@ -20,7 +20,23 @@ Perform Data Collection and Analysis for the Distributed Quorum based Mutual Exc
       * Time spent in the critical section
    * **Report any Deadlock situation**
 
-### Steps to run the application
+### Detailed Analysis
+Metrics with details
+    * **Total number of Messages Sent by**
+      * Quorum Servers
+      * Client Servers
+      * File Server
+   * **Total number of Messages Received by**
+      * Quorum Servers
+      * Client Servers
+      * File Server
+   * **Per Critical Section**
+      * Total Number of Messages Exchanged
+      * Latency (Total elapsed time between making a request and being able to enter the critical section)
+   * **Repeated with varying values and reported their impact on latency**
+      * Time between a client exiting its critical section and issuing its next request
+      * Time spent in the critical section
+   * **Report any Deadlock situation**
 1. Open Project in any IDE
 2. Generate the jar [Ex: quorum.jar]
 3. Copy the entire folder _quorum_[folder path in the project: distributed-quorum-system/quorum] to the dc machines of client, quorum & file servers and place the jar _within_ the _mutex_ folder
