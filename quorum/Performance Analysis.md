@@ -10,7 +10,7 @@ Perform Data Collection and Analysis for the Distributed Quorum based Mutual Exc
    * Repeated with varying values and reported their impact on latency
       * Time between a client exiting its critical section and issuing its next request
       * Time spent in the critical section
-   * Report any Deadlock situation**
+   * Report any Deadlock situation
 
 ### Detailed Analysis
 Metrics with details
