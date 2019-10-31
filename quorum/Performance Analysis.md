@@ -1,20 +1,18 @@
 # Data Collection and Performance Analysis
-Implement Quorum System based Distributed Mutual Exclusion in a Multi-Client, Multi-Server model
-
-## Getting Started
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. 
-
-
-### Softwares/SDKs
-1. Jdk 1.8.0 and above
-2. Any IDE
+Perform Data Collection and Analysis for the Distributed Quorum based Mutual Exclusion
 
 ### Overview
-* Model has 7 Quorum Servers, 5 Clients and 1 File Server
-* Quorum Servers 1-3 run on machines dc01-dc07 respectively
-* Clients 1-5 run on machines dc11-dc15 respectively
-* File Server runs on machine dc10. It writes to file file0.txt present in server s0
-     * Initially file0.txt is empty
+1. Model has 7 Quorum Servers, 5 Clients and 1 File Server
+2. Data Collection and Analysis has been done for the below
+    * The total number of messages sent by each node, either server node or client node, from the beginning until it sends the completion notification.
+     * The total number of messages received by each node, either server node or client node, from the beginning until it sends the completion notification.
+     * For each attempt to enter the critical section by each node, report the following:
+        * The total number of messages exchanged.
+        * The total elapsed time between making a request and being able to enter the critical section (latency).
+     * Rerun your experiment with other values of: 
+          * (a) time between a client exiting its critical section and issuing its next request, and 
+          * (b) time spent in the critical section. Report what impact do these changes have on perfor- mance, specifically latency.    
+          * Also, report if you come across any deadlock situation.
 
 ### Steps to run the application
 1. Open Project in any IDE
