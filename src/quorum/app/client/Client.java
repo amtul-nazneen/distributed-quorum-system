@@ -195,9 +195,11 @@ public class Client {
 							+ clientMutex.getMessageCounter().getMessagesSentQuorumServer());
 					Utils.log("Total Messages Sent to File Server: "
 							+ clientMutex.getMessageCounter().getMessagesSentFileServer());
-					Utils.log("Latency: " + Utils.printLatencyList(clientMutex.getMessageCounter().getLatencyList()));
-					Utils.log("Messages Exchanged: "
-							+ Utils.printMsgExchangeList(clientMutex.getMessageCounter().getMsgExchangeList()));
+					// Utils.log("Latency: " +
+					// Utils.printLatencyList(clientMutex.getMessageCounter().getLatencyList()));
+					// Utils.log("Messages Exchanged: "
+					// +
+					// Utils.printMsgExchangeList(clientMutex.getMessageCounter().getMsgExchangeList()));
 					Utils.log("Max latency:" + Utils.getMax(clientMutex.getMessageCounter().getLatencyList()));
 					Utils.log("Min latency:" + Utils.getMin(clientMutex.getMessageCounter().getLatencyList()));
 					Utils.log("Avg latency:" + Utils.getAverage(clientMutex.getMessageCounter().getLatencyList()));

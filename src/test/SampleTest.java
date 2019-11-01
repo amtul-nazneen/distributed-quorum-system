@@ -1,26 +1,40 @@
 package test;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.Scanner;
 
 import quorum.app.server.ClientRequestCounter;
 import quorum.app.util.Constants;
 
 public class SampleTest {
 	public static void main(String[] args) {
-		Random rand = new Random();
-		int jk = 10;
-		while (jk-- > 0) {
-			int i = rand.nextInt(3);
-			System.out.println(i);
+		int num;
+		int total = 0;
+		int count = 0;
+		double avg = 0.0;
+		Scanner scanner = new Scanner(System.in);
+		System.out.println("Feed me with numbers!");
+
+		while ((num = scanner.nextInt()) > 0) {
+			total += num;
+			count++;
+			System.out.println("Total so far:" + total);
+			System.out.println("Count so far:" + count);
 		}
-		List<Integer> j = new ArrayList<Integer>();
-		j.add(20);
-		j.add(50);
-		j.add(20);
-		j.add(120);
-		j.add(5);
+
+		{
+			System.out.println("Total so far:" + total);
+			System.out.println("Count so far:" + count);
+			avg = (double) total / (double) count;
+			System.out.println("Avg is:" + (avg));
+			// System.out.println("Number is negative! System Shutdown!");
+			System.exit(1);
+		}
+
+		/*
+		 * Random rand = new Random(); int jk = 10; while (jk-- > 0) { int i =
+		 * rand.nextInt(3); System.out.println(i); } List<Integer> j = new
+		 * ArrayList<Integer>(); j.add(20); j.add(50); j.add(20); j.add(120); j.add(5);
+		 */
 		// Utils.log("Max:" + Utils.getMax(j));
 		// Utils.log("Min:" + Utils.getMin(j));
 		// Utils.log("Average:" + Utils.getAverage(j));

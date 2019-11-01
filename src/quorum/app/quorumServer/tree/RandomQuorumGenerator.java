@@ -14,6 +14,7 @@ import quorum.app.util.Utils;
 public class RandomQuorumGenerator {
 	public static List<Integer> getQuorum() {
 		SingletonQuorumTree quorumTree = SingletonQuorumTree.getInstance();
+		quorumTree.getQuorum().clear();
 		quorumTree.recursiveQuorumSet(quorumTree.getRoot());
 		return quorumTree.getQuorum();
 	}
@@ -36,5 +37,9 @@ public class RandomQuorumGenerator {
 		Utils.log("Quorum Size Total:--" + map.size());
 		for (String key : map.keySet())
 			System.out.println(key);
+	}
+
+	public static void main(String[] args) {
+		test();
 	}
 }

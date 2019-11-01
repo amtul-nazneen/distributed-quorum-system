@@ -41,10 +41,10 @@ public class Constants {
 	public static final int SERVER_TIMEOUT = 20;
 	public static final int DEADLOCK_TIMEOUT = 90;
 
-	public static final int NEXT_REQ_TIME_MIN = 7;
-	public static final int NEXT_REQ_TIME_MAX = 10;
-	public static final int CS_TIME_MIN = 9;
-	public static final int CS_TIME_MAX = 11;
+	public static final int NEXT_REQ_TIME_MIN = 12;// 7;// 2;
+	public static final int NEXT_REQ_TIME_MAX = 15;// 10;// 5;
+	public static final int CS_TIME_MIN = 11;// 6;// 1;
+	public static final int CS_TIME_MAX = 13;// 8;// 3;
 
 	public static final int CLIENT1_WAIT_TIME_NEXT_CS = 2000;
 	public static final int CLIENT2_WAIT_TIME_NEXT_CS = 2500;
