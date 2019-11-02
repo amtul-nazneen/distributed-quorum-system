@@ -25,7 +25,7 @@ Perform Data Collection and Analysis for the Distributed Quorum based Mutual Exc
       * File Server: 105
  
  #### ANALYSIS AFTER VARYING FIELDS
-  ##### Round 1
+  #### Round 1
    * **Variable Fields**
       * Time between a client exiting its critical section and issuing its next request: 2-5 sec
       * Time spent in the critical section: 1-3 sec
@@ -39,7 +39,7 @@ Perform Data Collection and Analysis for the Distributed Quorum based Mutual Exc
          * Minimum: 06 sec
          * Maximum: 17 sec
  
- ##### Round 2
+ #### Round 2
    * **Variable Fields**
       * Time between a client exiting its critical section and issuing its next request: 7-10 sec
       * Time spent in the critical section: 6-8 sec
@@ -54,7 +54,7 @@ Perform Data Collection and Analysis for the Distributed Quorum based Mutual Exc
          * Maximum: 34 sec
       
 
-##### Round 3
+#### Round 3
    * **Variable Fields**
       * Time between a client exiting its critical section and issuing its next request: 12-15 sec
       * Time spent in the critical section: 11-13 sec
@@ -68,7 +68,7 @@ Perform Data Collection and Analysis for the Distributed Quorum based Mutual Exc
          * Minimum: 25 sec
          * Maximum: 49 sec
          
-##### Impact on Latency
+#### IMPACT ON LATENCY
 * When the above two fields were increased, there was an increase in latency as well
    * Time between a client exiting its critical section and issuing its next request
    * Time spent in the critical section
