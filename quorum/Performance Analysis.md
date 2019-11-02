@@ -81,7 +81,7 @@ Perform Data Collection and Analysis for the Distributed Quorum based Mutual Exc
          * Minimum: 25 sec
          * Maximum: 49 sec
          
-### Impact on latency
+### Impact on Latency
 * When the above two fields were increased, there was an increase in latency as well
    * Time between a client exiting its critical section and issuing its next request
    * Time spent in the critical section
