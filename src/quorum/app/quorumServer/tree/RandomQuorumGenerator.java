@@ -20,7 +20,7 @@ public class RandomQuorumGenerator {
 	}
 
 	/**
-	 * Tested method for testing the quorum sets
+	 * Test method for testing the quorum sets
 	 */
 	public static void test() {
 		SingletonQuorumTree quorumTree = SingletonQuorumTree.getInstance();
@@ -37,9 +37,5 @@ public class RandomQuorumGenerator {
 		Utils.log("Quorum Size Total:--" + map.size());
 		for (String key : map.keySet())
 			System.out.println(key);
-	}
-
-	public static void main(String[] args) {
-		test();
 	}
 }

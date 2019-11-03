@@ -56,15 +56,6 @@ public class SingletonQuorumTree {
 	 * 
 	 * @param root
 	 */
-	/*
-	 * public void recursiveQuorumSet(QNode root) { if (root == null) return; if
-	 * (root.left == null && root.right == null) { quorum.add(root.getId()); return;
-	 * } int i = rand.nextInt(1000); if (i % 3 == 2) { quorum.add(root.id); root =
-	 * root.left; recursiveQuorumSet(root); } else if (i % 3 == 1) {
-	 * quorum.add(root.id); root = root.right; recursiveQuorumSet(root); } else if
-	 * (i % 3 == 0) { recursiveQuorumSet(root.left); recursiveQuorumSet(root.right);
-	 * } }
-	 */
 	public void recursiveQuorumSet(QNode root) {
 		if (root == null)
 			return;

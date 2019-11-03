@@ -6,7 +6,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -191,19 +190,28 @@ public class Utils {
 			return Constants.CLIENT5_CS_TIME;
 	}
 
-	public static List<String> getRepliedAndPendingQuorums(HashMap<Integer, Boolean> quorumReplies) {
-		List<String> result = new ArrayList<String>();
-		String replied = "", pending = "";
+	public static String getRepliedQuorums(HashMap<Integer, Boolean> quorumReplies) {
+		String replied = "";
 		for (Map.Entry<Integer, Boolean> entry : quorumReplies.entrySet()) {
 			if (entry.getValue()) {
 				replied = replied + entry.getKey() + ",";
-			} else {
+			}
+		}
+		if (!replied.isEmpty())
+			replied = replied.substring(0, replied.length() - 1);
+		return replied;
+	}
+
+	public static String getPendingQuorums(HashMap<Integer, Boolean> quorumReplies) {
+		String pending = "";
+		for (Map.Entry<Integer, Boolean> entry : quorumReplies.entrySet()) {
+			if (!entry.getValue()) {
 				pending = pending + entry.getKey() + ",";
 			}
 		}
-		result.add(0, replied.substring(0, replied.length() - 1));
-		result.add(1, pending.substring(0, pending.length() - 1));
-		return result;
+		if (!pending.isEmpty())
+			pending = pending.substring(0, pending.length() - 1);
+		return pending;
 	}
 
 	public static String printLatencyList(List<Integer> list) {
@@ -230,9 +238,6 @@ public class Utils {
 				round = i;
 			}
 		}
-		// List<Integer> result = new ArrayList<Integer>();
-		// result.add(0, round);
-		// result.add(1, max);
 		result = "[" + round + ":" + max + "]";
 		return result;
 	}
@@ -247,9 +252,6 @@ public class Utils {
 				round = i;
 			}
 		}
-		// List<Integer> result = new ArrayList<Integer>();
-		// result.add(0, round);
-		// result.add(1, min);
 		result = "[" + round + ":" + min + "]";
 		return result;
 	}

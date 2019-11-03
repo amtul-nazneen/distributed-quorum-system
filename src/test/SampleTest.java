@@ -3,14 +3,16 @@ package test;
 import java.util.Scanner;
 
 import quorum.app.server.ClientRequestCounter;
-import quorum.app.util.Constants;
 
 public class SampleTest {
 	public static void main(String[] args) {
+		String a = "";
+		System.out.println(a.isEmpty());
 		int num;
 		int total = 0;
 		int count = 0;
 		double avg = 0.0;
+		@SuppressWarnings("resource")
 		Scanner scanner = new Scanner(System.in);
 		System.out.println("Feed me with numbers!");
 
@@ -45,12 +47,13 @@ public class SampleTest {
 			// System.out.println(ThreadLocalRandom.current().nextInt(2, 6));
 		}
 
-		String accessFile = Constants.HOME + Constants.CLIENT_LOG_FOLDER + Constants.CLIENT_LOG_FILE + 1
-				+ Constants.FILE_EXT;
-		String accessFile2 = Constants.HOME + Constants.QUORUM_LOG_FOLDER + Constants.QUORUM_LOG_FILE + 1
-				+ Constants.FILE_EXT;
-		String accessFile3 = Constants.HOME + Constants.SERVER_LOG_FOLDER + Constants.SERVER_LOG_FILE
-				+ Constants.FILE_EXT;
+		/*
+		 * String accessFile = Constants.HOME + Constants.CLIENT_LOG_FOLDER +
+		 * Constants.CLIENT_LOG_FILE + 1 + Constants.FILE_EXT; String accessFile2 =
+		 * Constants.HOME + Constants.QUORUM_LOG_FOLDER + Constants.QUORUM_LOG_FILE + 1
+		 * + Constants.FILE_EXT; String accessFile3 = Constants.HOME +
+		 * Constants.SERVER_LOG_FOLDER + Constants.SERVER_LOG_FILE + Constants.FILE_EXT;
+		 */
 		// System.out.println(accessFile);
 		// System.out.println(accessFile2);
 		// System.out.println(accessFile3);

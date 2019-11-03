@@ -130,12 +130,14 @@ class QuorumRequestHandler extends Thread {
 		File f = new File(accessFile);
 		FileWriter fw = new FileWriter(f, false);
 		BufferedWriter filewriter = new BufferedWriter(fw);
-		filewriter.write("================= DATA COLLECTION FOR QUORUM SERVER:" + quorumID + " =================="
+		filewriter.write("================= BEGIN DATA COLLECTION FOR QUORUM SERVER:" + quorumID + " =================="
 				+ Constants.EOL);
 		filewriter.write("Total Messages: " + quorumMutex.getTotalMessages() + Constants.EOL);
 		filewriter.write("Total Messages Sent to Clients: " + quorumMutex.getMessagesSentClient() + Constants.EOL);
 		filewriter.write(
 				"Total Messages Received from Clients: " + quorumMutex.getMessagesReceivedClient() + Constants.EOL);
+		filewriter.write("================= END DATA COLLECTION FOR QUORUM SERVER:" + quorumID + " =================="
+				+ Constants.EOL);
 		filewriter.close();
 		fw.close();
 	}

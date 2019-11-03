@@ -111,12 +111,13 @@ public class ServerRequestHandler implements Runnable {
 		File f = new File(accessFile);
 		FileWriter fw = new FileWriter(f, true);
 		BufferedWriter filewriter = new BufferedWriter(fw);
-		filewriter.write("================= DATA COLLECTION FOR FILE SERVER ==================" + Constants.EOL);
+		filewriter.write("================= BEGIN DATA COLLECTION FOR FILE SERVER ==================" + Constants.EOL);
 		filewriter.write("Total Messages: " + clientReqCounter.getTotalMessages() + Constants.EOL);
 		filewriter.write(
 				"Total Messages Sent to all Clients: " + clientReqCounter.getMessagesSentClient() + Constants.EOL);
 		filewriter.write("Total Messages Received from all Clients: " + clientReqCounter.getMessagesReceivedClient()
 				+ Constants.EOL);
+		filewriter.write("================= END DATA COLLECTION FOR FILE SERVER ==================" + Constants.EOL);
 		filewriter.close();
 		fw.close();
 	}

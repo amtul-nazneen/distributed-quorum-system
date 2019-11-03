@@ -100,7 +100,6 @@ public class ClientMutexImpl {
 		Timestamp pollBegin = Utils.getTimestamp();
 		while (pendingQuorumReply > 0) {
 			try {
-				Utils.log("Waiting for Grant....");
 				Timestamp current = Utils.getTimestamp();
 				int diff = Utils.getTimeDifference(pollBegin, current);
 				if (diff >= Constants.DEADLOCK_TIMEOUT) {
@@ -109,9 +108,9 @@ public class ClientMutexImpl {
 					Utils.log("Deadlock occurred at Client:" + clientID + ". Details below.");
 					Utils.log("CS Request made at: [" + time + "]");
 					Utils.log("Quorum Request Set:" + Utils.getSelectedQuorumIDFromMap(docsForQuorum));
-					Utils.log("Received Quorum Replies: " + Utils.getRepliedAndPendingQuorums(quorumReplies).get(0));
+					Utils.log("Received Quorum Replies: " + Utils.getRepliedQuorums(quorumReplies));
 					Utils.log("Pending Quorum Replies Possibly Causing Deadlock: "
-							+ Utils.getRepliedAndPendingQuorums(quorumReplies).get(1));
+							+ Utils.getPendingQuorums(quorumReplies));
 					String accessFile = Constants.HOME + Constants.CLIENT_LOG_FOLDER + Constants.CLIENT_LOG_FILE
 							+ clientID + Constants.FILE_EXT;
 					File f = new File(accessFile);
@@ -123,14 +122,14 @@ public class ClientMutexImpl {
 					filewriter.write("CS Request made at: [" + time + "]" + Constants.EOL);
 					filewriter.write(
 							"Quorum Request Set:" + Utils.getSelectedQuorumIDFromMap(docsForQuorum) + Constants.EOL);
-					filewriter.write("Received Quorum Replies: "
-							+ Utils.getRepliedAndPendingQuorums(quorumReplies).get(0) + Constants.EOL);
+					filewriter.write(
+							"Received Quorum Replies: " + Utils.getRepliedQuorums(quorumReplies) + Constants.EOL);
 					filewriter.write("Pending Quorum Replies Possibly Causing Deadlock: "
-							+ Utils.getRepliedAndPendingQuorums(quorumReplies).get(1) + Constants.EOL);
+							+ Utils.getPendingQuorums(quorumReplies) + Constants.EOL);
 					filewriter.close();
 					fw.close();
 
-					Thread.sleep(100000);
+					Thread.sleep(Constants.AFTER_DEADLOCK_WAIT);
 				}
 				Thread.sleep(3000);
 			} catch (Exception e) {

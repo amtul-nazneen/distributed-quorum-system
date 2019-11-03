@@ -148,7 +148,6 @@ public class Client {
 				/* Randomize - Exiting and re-requesting */
 				Thread.sleep((long) ThreadLocalRandom.current().nextInt(Constants.NEXT_REQ_TIME_MIN,
 						Constants.NEXT_REQ_TIME_MAX + 1) * 1000);
-				// TODO
 				Utils.log(
 						"~~|~~|~~|~~|~~|~~|~~ CS Access Requesting: ------------------------------------>->->->->->->->->->"
 								+ csRequestCount);
@@ -161,14 +160,12 @@ public class Client {
 					quorums.put(quorumId, allQuorumServers.get(quorumId));
 				}
 
-				// Timestamp myRequestTime = Utils.getTimestamp();
 				clientMutex.mapQuorumDOS(quorums);
 				clientMutex.getMessageCounter().resetCSMessages();
 				clientMutex.myCSRequestBegin(myRequestTime);
 				Timestamp myCSExecTime = Utils.getTimestamp();
 				executeCS(dosFileServer, disFileServer, clientMutex);
 
-				Thread.sleep((long) Math.random() * 1000);// TODO
 				clientMutex.sendRelease();
 				Utils.log("@_@_@_@_@_@_@_@ --- Critical Section Data Collection for Client:" + clientID);
 				Utils.log(". . . . . . . . . . Total CS Messages Exchanged: "
@@ -195,19 +192,14 @@ public class Client {
 							+ clientMutex.getMessageCounter().getMessagesSentQuorumServer());
 					Utils.log("Total Messages Sent to File Server: "
 							+ clientMutex.getMessageCounter().getMessagesSentFileServer());
-					// Utils.log("Latency: " +
-					// Utils.printLatencyList(clientMutex.getMessageCounter().getLatencyList()));
-					// Utils.log("Messages Exchanged: "
-					// +
-					// Utils.printMsgExchangeList(clientMutex.getMessageCounter().getMsgExchangeList()));
-					Utils.log("Max latency:" + Utils.getMax(clientMutex.getMessageCounter().getLatencyList()));
-					Utils.log("Min latency:" + Utils.getMin(clientMutex.getMessageCounter().getLatencyList()));
-					Utils.log("Avg latency:" + Utils.getAverage(clientMutex.getMessageCounter().getLatencyList()));
-					Utils.log("Max MessageExchange:"
+					Utils.log("Max Latency:" + Utils.getMax(clientMutex.getMessageCounter().getLatencyList()));
+					Utils.log("Min Latency:" + Utils.getMin(clientMutex.getMessageCounter().getLatencyList()));
+					Utils.log("Avg Latency:" + Utils.getAverage(clientMutex.getMessageCounter().getLatencyList()));
+					Utils.log("Max Messages Exchanged:"
 							+ Utils.getMax(clientMutex.getMessageCounter().getMsgExchangeList()));
-					Utils.log("Min MessageExchange:"
+					Utils.log("Min Messages Exchanged:"
 							+ Utils.getMin(clientMutex.getMessageCounter().getMsgExchangeList()));
-					Utils.log("Avg MessageExchange:"
+					Utils.log("Avg Messages Exchanged:"
 							+ Utils.getAverage(clientMutex.getMessageCounter().getMsgExchangeList()));
 
 					logDataCollectionToFile(clientMutex);
@@ -231,6 +223,7 @@ public class Client {
 			throws Exception {
 		Utils.log("===================== Starting   CS_Access: [[[[[[[[[ ---- " + csRequestCount
 				+ " ---- ]]]]]]]]] ===================");
+		Timestamp begin = Utils.getTimestamp();
 		dosFileServer.writeUTF(Constants.WRITE + "," + clientID + "," + Utils.getTimestampForLog());
 		clientMutex.updateMessagesSent(Constants.FILE_SERVER);
 		clientMutex.updateCSMessages();
@@ -248,7 +241,9 @@ public class Client {
 		}
 		/* Randomising- time spent in critical section */
 		Thread.sleep(
-				(long) ThreadLocalRandom.current().nextInt(Constants.CS_TIME_MIN, Constants.CS_TIME_MAX + 1) * 1000);// TODO
+				(long) ThreadLocalRandom.current().nextInt(Constants.CS_TIME_MIN, Constants.CS_TIME_MAX + 1) * 1000);
+		Timestamp end = Utils.getTimestamp();
+		Utils.log("Time spent in the critical section:" + Utils.getTimeDifference(begin, end) + " sec");
 		Utils.log("===================== Completed  CS_Access: [[[[[[[[[ ---- " + csRequestCount
 				+ " ---- ]]]]]]]]] ===================");
 	}
@@ -299,8 +294,8 @@ public class Client {
 		File f = new File(accessFile);
 		FileWriter fw = new FileWriter(f, true);
 		BufferedWriter filewriter = new BufferedWriter(fw);
-		filewriter.write("===================== DATA COLLECTION FOR CLIENT:" + clientID + " ===================== "
-				+ Constants.EOL);
+		filewriter.write("===================== BEGIN DATA COLLECTION FOR CLIENT:" + clientID
+				+ " ===================== " + Constants.EOL);
 		filewriter.write("Total Messages: " + clientMutex.getMessageCounter().getTotalMessages() + Constants.EOL);
 		filewriter.write(
 				"Total Messages Sent: " + +clientMutex.getMessageCounter().getTotalMessagesSent() + Constants.EOL);
@@ -314,23 +309,25 @@ public class Client {
 				+ clientMutex.getMessageCounter().getMessagesSentQuorumServer() + Constants.EOL);
 		filewriter.write("Total Messages Sent to File Server: "
 				+ clientMutex.getMessageCounter().getMessagesSentFileServer() + Constants.EOL);
+		filewriter
+				.write("Max Latency:" + Utils.getMax(clientMutex.getMessageCounter().getLatencyList()) + Constants.EOL);
+		filewriter
+				.write("Min Latency:" + Utils.getMin(clientMutex.getMessageCounter().getLatencyList()) + Constants.EOL);
+		filewriter.write(
+				"Avg Latency:" + Utils.getAverage(clientMutex.getMessageCounter().getLatencyList()) + Constants.EOL);
+		filewriter.write("Max Messages Exchanged:" + Utils.getMax(clientMutex.getMessageCounter().getMsgExchangeList())
+				+ Constants.EOL);
+		filewriter.write("Min Messages Exchanged:" + Utils.getMin(clientMutex.getMessageCounter().getMsgExchangeList())
+				+ Constants.EOL);
+		filewriter.write("Avg Messages Exchanged:"
+				+ Utils.getAverage(clientMutex.getMessageCounter().getMsgExchangeList()) + Constants.EOL);
+		filewriter.write(" -------- --------- ----------- ------------ " + Constants.EOL);
 		filewriter.write(
 				"Latency: " + Utils.printLatencyList(clientMutex.getMessageCounter().getLatencyList()) + Constants.EOL);
 		filewriter.write("Messages Exchanged: "
 				+ Utils.printMsgExchangeList(clientMutex.getMessageCounter().getLatencyList()) + Constants.EOL);
-		filewriter
-				.write("Max latency:" + Utils.getMax(clientMutex.getMessageCounter().getLatencyList()) + Constants.EOL);
-		filewriter
-				.write("Min latency:" + Utils.getMin(clientMutex.getMessageCounter().getLatencyList()) + Constants.EOL);
-		filewriter.write(
-				"Avg latency:" + Utils.getAverage(clientMutex.getMessageCounter().getLatencyList()) + Constants.EOL);
-		filewriter.write("Max MessageExchange:" + Utils.getMax(clientMutex.getMessageCounter().getMsgExchangeList())
+		filewriter.write("===================== END DATA COLLECTION FOR CLIENT:" + clientID + " ===================== "
 				+ Constants.EOL);
-		filewriter.write("Min MessageExchange:" + Utils.getMin(clientMutex.getMessageCounter().getMsgExchangeList())
-				+ Constants.EOL);
-		filewriter.write("Avg MessageExchange:" + Utils.getAverage(clientMutex.getMessageCounter().getMsgExchangeList())
-				+ Constants.EOL);
-
 		filewriter.close();
 		fw.close();
 	}
