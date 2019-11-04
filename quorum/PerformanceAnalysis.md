@@ -114,6 +114,7 @@ Perform Data Collection and Analysis for the Distributed Quorum based Mutual Exc
     * This field is primarily determining the Latency 
     * If this value reaches close to the Deadlock Detection Timeout value then the deadlock is seen in the clients along with high latency
 2. With increase in _Time Between Client Exiting Critical Section and Issuing Next request_ field
+	* The latency relatively reduced 
     * The latency was the maximum of _Time Spent In Critical Section_ range, it didn't increase beyond this
     * Example: In Round 4, the latency was 3 sec which is the maximum amount of time spent in the critical section
     * The remaining performance metrics (no. of messages sent/received, no. of messages exchanged per critical section etc) remain unimpacted as well
